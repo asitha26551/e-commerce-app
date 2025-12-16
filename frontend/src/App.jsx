@@ -12,7 +12,6 @@ import { CheckoutPage } from './pages/CheckoutPage'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { ProfilePage } from './pages/ProfilePage'
-import { AdminDashboardPage } from './pages/AdminDashboardPage'
 import { AboutPage } from './pages/AboutPage'
 import { ContactPage } from './pages/ContactPage'
 import { OrderHistoryPage } from './pages/OrderHistoryPage'
@@ -38,8 +37,6 @@ export function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/orders" element={<OrderHistoryPage />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminDashboardPage />} />
         </Routes>
       </Router>
     </CartProvider>
