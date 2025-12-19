@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const adminAUth = async (req, res, next) => {
+const adminAuth = async (req, res, next) => {
     try {
         const { token } = req.headers;
 
@@ -21,4 +21,4 @@ const adminAUth = async (req, res, next) => {
     }
 }
 
-export default adminAUth;
+export default adminAuth;
