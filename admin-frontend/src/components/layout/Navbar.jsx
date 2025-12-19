@@ -1,8 +1,15 @@
-import React from 'react'
-import { Bell, Menu, User } from 'lucide-react'
-import { Button } from '../ui/Button'
+import { User } from 'lucide-react';
+import { Bell } from 'lucide-react';
+import { Menu } from 'lucide-react';
+import { Button } from '../ui/Button';
+import { useAdminAuth } from '../../context/AdminAuthContext';
 
 export function Navbar() {
+  const { dispatch } = useAdminAuth();
+  const handleLogout = () => {
+    dispatch({ type: 'LOGOUT' });
+  };
+
   return (
     <nav className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -43,6 +50,10 @@ export function Navbar() {
               <div className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 bg-gray-100">
                 <User className="h-5 w-5 text-gray-500" />
               </div>
+
+              <Button variant="outline" size="sm" onClick={handleLogout} className="ml-2">
+                Logout
+              </Button>
             </div>
           </div>
         </div>
