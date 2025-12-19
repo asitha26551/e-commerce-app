@@ -1,6 +1,15 @@
-import React from 'react'
-import { AdminDashboardPage } from './pages/AdminDashboardPage'
+
+import React from 'react';
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { LoginPage } from './pages/AdminLoginPage';
+
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export function App() {
-  return <AdminDashboardPage />
+  // Simple token check (localStorage)
+  const token = localStorage.getItem('admin_token');
+  if (!token) {
+    return <LoginPage />;
+  }
+  return <AdminDashboardPage />;
 }
