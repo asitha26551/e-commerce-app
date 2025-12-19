@@ -4,19 +4,26 @@ import { Button } from '../components/ui/Button'
 import { backendUrl } from '../App';
 import axios from 'axios';
 import { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import { useAdminAuth } from '../context/AdminAuthContext';
 
 export function LoginPage() {
-  const [email, setEmail] = useState(' ');
-  const [password, setPassword] = useState(' ');
+  const { dispatch } = useAdminAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onSubmitHandler = async (e) => {
     try {
       e.preventDefault();
-      console.log('Email:', email, 'Password:', password);
       const response = await axios.post(backendUrl + 'api/user/admin', { email, password });
-      console.log('Axios response:', response);
+      if(response.data.success){
+        dispatch({ type: 'LOGIN', token: response.data.token });
+      } else {
+        toast.error('Login failed: ' + response.data.message);
+      }
     } catch (error) {
-      console.error('Axios error:', error);
+      console.log('Axios error:', error);
+      toast.error('An error occurred during login. Please try again.');
     }
   }
   return (
