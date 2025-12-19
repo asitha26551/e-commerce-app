@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
 
@@ -17,6 +17,11 @@ import { ContactPage } from './pages/ContactPage'
 import { OrderHistoryPage } from './pages/OrderHistoryPage'
 
 export function App() {
+
+  //const [token, setToken] = useState('');
+
+
+
   return (
     <CartProvider>
       <Router>
