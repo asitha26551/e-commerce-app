@@ -1,5 +1,5 @@
 // HomePage.jsx
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Truck, Shield, RefreshCw, Clock } from 'lucide-react'
 import { Navbar } from '../components/layout/Navbar'
@@ -7,11 +7,69 @@ import { Footer } from '../components/layout/Footer'
 import { ProductCard } from '../components/product/ProductCard'
 import { CategoryCard } from '../components/category/CategoryCard'
 import { Button } from '../components/ui/Button'
-import { products, categories } from '../utils/mockData'
+
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || '/api',
+})
 
 export function HomePage() {
+  const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Fetch products and categories
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          api.get('/api/product'),
+          api.get('/api/categories')
+        ])
+        const productsArr = Array.isArray(productsRes.data.products) ? productsRes.data.products : []
+        setProducts(productsArr.map(p => ({
+          id: p._id,
+          name: p.name,
+          price: p.price,
+          stock: p.stock,
+          category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+          images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+          rating: 4.5,
+          description: p.description || ''
+        })))
+
+        // Use categories from DB, show subcategory count if available
+        const categoriesArr = Array.isArray(categoriesRes.data) ? categoriesRes.data : []
+        setCategories(categoriesArr.map(c => ({
+          id: c._id,
+          name: c.name,
+          image: c.image || 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=500',
+          productCount: Array.isArray(c.subcategories) ? c.subcategories.length : 0
+        })))
+      } catch (err) {
+        console.error('Failed to fetch data:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [])
+
   const featuredProducts = products.slice(0, 4)
-  const bestSellers = products.filter((p) => p.isBestSeller).slice(0, 4)
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center">
+          <p className="text-gray-500 text-lg">Loading...</p>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -31,6 +89,7 @@ export function HomePage() {
                 Shop the latest trends in electronics, fashion, home, and more. Fast shipping and secure payments guaranteed.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
+                {/* Shop Now navigates to /products, which shows all products from the database */}
                 <Link to="/products">
                   <Button size="lg" variant="cta" className="w-full sm:w-auto">
                     Shop Now <ArrowRight className="ml-2 h-5 w-5" />
@@ -109,9 +168,13 @@ export function HomePage() {
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.slice(0, 6).map((category) => (
-                <CategoryCard key={category.id} category={category} />
-              ))}
+              {categories.length === 0 ? (
+                <div className="col-span-full text-gray-500">No categories found.</div>
+              ) : (
+                categories.slice(0, 6).map((category) => (
+                  <CategoryCard key={category.id} category={category} />
+                ))
+              )}
             </div>
           </div>
         </section>
@@ -124,40 +187,6 @@ export function HomePage() {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Promo Banner */}
-        <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-gray-900 rounded-2xl overflow-hidden relative">
-              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-40"></div>
-              <div className="relative z-10 px-8 py-16 md:px-16 md:py-20 text-center md:text-left">
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  End of Season Sale
-                </h2>
-                <p className="text-xl text-gray-300 mb-8 max-w-lg">
-                  Get up to 50% off on selected items. Limited time offer, don't miss out!
-                </p>
-                <Button variant="cta" size="lg">
-                  Shop the Sale
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Best Sellers */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">
-              Best Sellers
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {bestSellers.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

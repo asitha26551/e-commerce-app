@@ -8,30 +8,78 @@ import { ProductCard } from '../components/product/ProductCard'
 import { ProductFilters } from '../components/product/ProductFilters'
 import { Button } from '../components/ui/Button'
 import { Select } from '../components/ui/Select'
-import { products } from '../utils/mockData'
+
+import axios from 'axios'
+const api = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || '/api',
+})
 
 export function ProductListingPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   // Filter states
   const [selectedCategory, setSelectedCategory] = useState(
     searchParams.get('category')
   )
+  const [selectedSubcategory, setSelectedSubcategory] = useState(
+    searchParams.get('subcategory')
+  )
+  const [selectedProductType, setSelectedProductType] = useState(
+    searchParams.get('productType')
+  )
   const [priceRange, setPriceRange] = useState([0, 2000])
   const [sortBy, setSortBy] = useState('newest')
 
-  // Update URL when category changes
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true)
+      try {
+        const res = await api.get('/api/product')
+        const arr = Array.isArray(res.data.products) ? res.data.products : []
+        setProducts(arr.map(p => ({
+          id: p._id,
+          name: p.name,
+          price: p.price,
+          stock: p.stock,
+          category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+          subcategory: p.subcategoryId && p.subcategoryId.name ? p.subcategoryId.name : '',
+          productType: p.productTypeId && p.productTypeId.name ? p.productTypeId.name : '',
+          images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+          rating: 4.5,
+          description: p.description || ''
+        })))
+      } catch (err) {
+        console.error('Failed to fetch products:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProducts()
+  }, [])
+
+  // Update URL when filters change
   useEffect(() => {
     const params = {}
     if (selectedCategory) params.category = selectedCategory
+    if (selectedSubcategory) params.subcategory = selectedSubcategory
+    if (selectedProductType) params.productType = selectedProductType
     setSearchParams(params)
-  }, [selectedCategory, setSearchParams])
+  }, [selectedCategory, selectedSubcategory, selectedProductType, setSearchParams])
 
-  // Filter products
+  // Debug: log products and filter states
+  console.log('Products:', products)
+  console.log('Filters:', { selectedCategory, selectedSubcategory, selectedProductType, priceRange })
+
+  // Relaxed filter logic: only filter if product field exists
   const filteredProducts = products
     .filter((product) => {
-      if (selectedCategory && product.category !== selectedCategory) return false
+      if (selectedCategory && product.category && product.category !== selectedCategory) return false
+      if (selectedSubcategory && product.subcategory && product.subcategory !== selectedSubcategory) return false
+      if (selectedProductType && product.productType && product.productType !== selectedProductType) return false
       if (product.price < priceRange[0] || product.price > priceRange[1]) return false
       const searchQuery = searchParams.get('search')?.toLowerCase()
       if (searchQuery && !product.name.toLowerCase().includes(searchQuery)) return false
@@ -62,7 +110,7 @@ export function ProductListingPage() {
               {selectedCategory || 'All Products'}
             </h1>
             <p className="text-gray-500 mt-1">
-              Showing {filteredProducts.length} results
+              {loading ? 'Loading...' : `Showing ${filteredProducts.length} results`}
             </p>
           </div>
 
@@ -98,6 +146,10 @@ export function ProductListingPage() {
             <ProductFilters
               selectedCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
+              selectedSubcategory={selectedSubcategory}
+              onSubcategoryChange={setSelectedSubcategory}
+              selectedProductType={selectedProductType}
+              onProductTypeChange={setSelectedProductType}
               priceRange={priceRange}
               onPriceChange={setPriceRange}
             />
@@ -105,7 +157,11 @@ export function ProductListingPage() {
 
           {/* Product Grid */}
           <div className="flex-1">
-            {filteredProducts.length > 0 ? (
+            {loading ? (
+              <div className="text-center py-16">
+                <p className="text-gray-500 text-lg">Loading products...</p>
+              </div>
+            ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
@@ -121,6 +177,8 @@ export function ProductListingPage() {
                   className="mt-4"
                   onClick={() => {
                     setSelectedCategory(null)
+                    setSelectedSubcategory(null)
+                    setSelectedProductType(null)
                     setPriceRange([0, 2000])
                     setSearchParams({})
                   }}
@@ -151,6 +209,10 @@ export function ProductListingPage() {
               <ProductFilters
                 selectedCategory={selectedCategory}
                 onCategoryChange={setSelectedCategory}
+                selectedSubcategory={selectedSubcategory}
+                onSubcategoryChange={setSelectedSubcategory}
+                selectedProductType={selectedProductType}
+                onProductTypeChange={setSelectedProductType}
                 priceRange={priceRange}
                 onPriceChange={setPriceRange}
                 mobile
