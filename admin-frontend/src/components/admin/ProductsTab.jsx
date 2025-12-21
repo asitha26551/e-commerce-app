@@ -1,8 +1,47 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useAdminAuth } from '../../context/AdminAuthContext';
 import { motion } from 'framer-motion'
 import { Edit, Trash2 } from 'lucide-react'
+import axios from 'axios';
 
-export function ProductsTab({ products = [] }) {
+export function ProductsTab() {
+  const { state: { token } } = useAdminAuth();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await axios.get('/api/product', {
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token || '',
+          },
+        });
+        // Use data.products if present (backend returns { products: [...] })
+        const arr = Array.isArray(res.data.products) ? res.data.products : [];
+        setProducts(arr.map(p => ({
+          id: p._id,
+          name: p.name,
+          price: p.price,
+          stock: p.stock,
+          images: p.images && p.images.length ? (Array.isArray(p.images) ? p.images.map(img => img.imageUrl || "/placeholder.png") : ["/placeholder.png"]) : ["/placeholder.png"],
+          category: p.categoryId && p.categoryId.name ? p.categoryId.name : (p.categoryId || ''),
+        })));
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [token]);
+
+  if (loading) return <div className="p-6">Loading products...</div>;
+  if (error) return <div className="p-6 text-red-500">{error}</div>;
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
