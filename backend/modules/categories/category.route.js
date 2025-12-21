@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 // Get all categories with subcategories and product types
-router.get('/', adminAuth, getCategories);
+router.get('/', getCategories);
 router.post('/', adminAuth, addCategory);
 
 export default router;

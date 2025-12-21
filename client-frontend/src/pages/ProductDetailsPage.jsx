@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Star, Truck, RefreshCw, Heart } from 'lucide-react'
 import { Navbar } from '../components/layout/Navbar'
@@ -8,27 +8,116 @@ import { ProductReviews } from '../components/product/ProductReviews'
 import { RelatedProducts } from '../components/product/RelatedProducts'
 import { Button } from '../components/ui/Button'
 import { useCart } from '../context/CartContext'
-import { products } from '../utils/mockData'
+
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || '/api',
+})
 
 export function ProductDetailsPage() {
   const { id } = useParams()
   const { addToCart } = useCart()
-  const product = products.find(p => p.id === id) || products[0]
+  const [product, setProduct] = useState(null)
+  const [relatedProducts, setRelatedProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const [selectedSize, setSelectedSize] = useState(
-    product.sizes && product.sizes.length > 0 ? product.sizes[0] : ''
-  )
-  const [selectedColor, setSelectedColor] = useState(
-    product.colors && product.colors.length > 0 ? product.colors[0] : ''
-  )
+  const [selectedSize, setSelectedSize] = useState('')
+  const [selectedColor, setSelectedColor] = useState('')
   const [quantity, setQuantity] = useState(1)
 
-  const relatedProducts = products
-    .filter(p => p.category === product.category && p.id !== product.id)
-    .slice(0, 4)
+  // Fetch product details
+  useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true)
+      try {
+        const res = await api.get(`/api/product/${id}`)
+        const p = res.data.product
+
+        const productData = {
+          id: p._id,
+          name: p.name,
+          price: p.price,
+          stock: p.stock,
+          category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+          categoryId: p.categoryId && p.categoryId._id ? p.categoryId._id : '',
+          images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+          rating: 4.5,
+          reviewCount: 0,
+          description: p.description || '',
+          sizes: p.variants ? [...new Set(p.variants.map(v => v.size).filter(Boolean))] : [],
+          colors: p.variants ? [...new Set(p.variants.map(v => v.color).filter(Boolean))] : []
+        }
+
+        setProduct(productData)
+
+        // Set default selections
+        if (productData.sizes && productData.sizes.length > 0) {
+          setSelectedSize(productData.sizes[0])
+        }
+        if (productData.colors && productData.colors.length > 0) {
+          setSelectedColor(productData.colors[0])
+        }
+
+        // Fetch related products (same category)
+        if (productData.categoryId) {
+          const allProductsRes = await api.get('/api/product')
+          const allProducts = Array.isArray(allProductsRes.data.products) ? allProductsRes.data.products : []
+          const related = allProducts
+            .filter(prod =>
+              prod.categoryId && prod.categoryId._id === productData.categoryId &&
+              prod._id !== productData.id
+            )
+            .slice(0, 4)
+            .map(p => ({
+              id: p._id,
+              name: p.name,
+              price: p.price,
+              stock: p.stock,
+              category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+              images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+              rating: 4.5,
+              description: p.description || ''
+            }))
+          setRelatedProducts(related)
+        }
+      } catch (err) {
+        console.error('Failed to fetch product:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProduct()
+  }, [id])
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedSize, selectedColor)
+    if (product) {
+      addToCart(product, quantity, selectedSize, selectedColor)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center">
+          <p className="text-gray-500 text-lg">Loading product...</p>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        <Navbar />
+        <main className="flex-grow flex items-center justify-center">
+          <p className="text-gray-500 text-lg">Product not found</p>
+        </main>
+        <Footer />
+      </div>
+    )
   }
 
   return (
@@ -104,81 +193,30 @@ export function ProductDetailsPage() {
             {/* Description */}
             <p className="text-gray-600 mb-8 leading-relaxed">{product.description}</p>
 
-            {/* Selectors */}
-            <div className="space-y-6 mb-8">
-              {/* Colors */}
-              {product.colors && (
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">
-                    Color: <span className="text-gray-500">{selectedColor}</span>
-                  </h3>
-                  <div className="flex flex-wrap gap-3">
-                    {product.colors.map(color => (
-                      <button
-                        key={color}
-                        onClick={() => setSelectedColor(color)}
-                        className={`w-10 h-10 rounded-full border-2 focus:outline-none ${
-                          selectedColor === color
-                            ? 'border-primary ring-2 ring-primary ring-offset-2'
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        style={{ backgroundColor: color.toLowerCase() }}
-                        title={color}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Sizes */}
-              {product.sizes && (
-                <div>
-                  <h3 className="text-sm font-medium text-gray-900 mb-3">
-                    Size: <span className="text-gray-500">{selectedSize}</span>
-                  </h3>
-                  <div className="flex flex-wrap gap-3">
-                    {product.sizes.map(size => (
-                      <button
-                        key={size}
-                        onClick={() => setSelectedSize(size)}
-                        className={`min-w-[3rem] h-10 px-3 rounded-md border text-sm font-medium transition-all ${
-                          selectedSize === size
-                            ? 'border-primary bg-primary text-white'
-                            : 'border-gray-200 text-gray-900 hover:border-gray-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Quantity */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-900 mb-3">Quantity</h3>
-                <div className="flex items-center border border-gray-300 rounded-md w-32">
-                  <button
-                    className="px-3 py-2 text-gray-600 hover:bg-gray-100 border-r border-gray-300"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    -
-                  </button>
-                  <input
-                    type="text"
-                    value={quantity}
-                    readOnly
-                    className="w-full text-center text-gray-900 font-medium focus:outline-none"
-                  />
-                  <button
-                    className="px-3 py-2 text-gray-600 hover:bg-gray-100 border-l border-gray-300"
-                    onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                  >
-                    +
-                  </button>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">{product.stock} items available</p>
+            {/* Quantity */}
+            <div className="mb-8">
+              <h3 className="text-sm font-medium text-gray-900 mb-3">Quantity</h3>
+              <div className="flex items-center border border-gray-300 rounded-md w-32">
+                <button
+                  className="px-3 py-2 text-gray-600 hover:bg-gray-100 border-r border-gray-300"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                >
+                  -
+                </button>
+                <input
+                  type="text"
+                  value={quantity}
+                  readOnly
+                  className="w-full text-center text-gray-900 font-medium focus:outline-none"
+                />
+                <button
+                  className="px-3 py-2 text-gray-600 hover:bg-gray-100 border-l border-gray-300"
+                  onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                >
+                  +
+                </button>
               </div>
+              <p className="text-xs text-gray-500 mt-2">{product.stock} items available</p>
             </div>
 
             {/* Actions */}
@@ -214,8 +252,7 @@ export function ProductDetailsPage() {
           </div>
         </div>
 
-        {/* Reviews & Related */}
-        <ProductReviews rating={product.rating} reviewCount={product.reviewCount} />
+        {/* Related Products (same category) */}
         <RelatedProducts products={relatedProducts} />
       </main>
 

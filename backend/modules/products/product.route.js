@@ -11,8 +11,8 @@ productRouter.post('/', adminAuth,upload.fields([
     {name:'image3', maxCount:1}, 
     {name:'image4', maxCount:1}]
 ), addProduct);               
-productRouter.get('/', adminAuth, getAllProducts);            
-productRouter.get('/:id', adminAuth, getProductById);         
+productRouter.get('/', getAllProducts);            
+productRouter.get('/:id', getProductById);         
 productRouter.delete('/:id', adminAuth, removeProductById);  
 
 export default productRouter;

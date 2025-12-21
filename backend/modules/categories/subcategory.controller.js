@@ -1,5 +1,16 @@
 import Subcategory from './Subcategory.model.js';
 
+export const getSubcategories = async (req, res) => {
+  try {
+    const { categoryId } = req.query;
+    const filter = categoryId ? { categoryId } : {};
+    const subcategories = await Subcategory.find(filter).populate('categoryId', 'name');
+    res.json(subcategories);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const addSubcategory = async (req, res) => {
   try {
     const { name, categoryId } = req.body;
