@@ -84,7 +84,7 @@ export function LoginPage() {
               </a>
             </div>
           </div>
-          <Button type="submit" fullWidth size="lg">
+          <Button type="submit" size="lg" className="w-full">
             Sign in
           </Button>
         </form>
