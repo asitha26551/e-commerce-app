@@ -6,6 +6,5 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    // Proxy removed; use VITE_BACKEND_URL in axios baseURL
   },
 })

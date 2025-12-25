@@ -21,8 +21,16 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'))
   const navigate = useNavigate()
   const userMenuRef = useRef(null)
+
+  // Watch for token changes (login/logout in other tabs)
+  useEffect(() => {
+    const checkAuth = () => setIsAuthenticated(!!localStorage.getItem('token'));
+    window.addEventListener('storage', checkAuth);
+    return () => window.removeEventListener('storage', checkAuth);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -33,9 +41,10 @@ export function Navbar() {
   }
 
   const handleLogout = () => {
-    // Add logout logic here (clear auth tokens, etc.)
-    setIsUserMenuOpen(false)
-    navigate('/login')
+    localStorage.removeItem('token');
+    setIsUserMenuOpen(false);
+    setIsAuthenticated(false);
+    navigate('/login');
   }
 
   // Close dropdown when clicking outside
@@ -101,63 +110,58 @@ export function Navbar() {
               Contact
             </Link>
 
-            {/* User Dropdown Menu */}
-            <div className="relative" ref={userMenuRef}>
-              <button
-                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            {/* User Dropdown Menu or Sign In */}
+            {isAuthenticated ? (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center hover:text-gray-200 transition-colors focus:outline-none"
+                >
+                  <User className="h-5 w-5 mr-1" />
+                  <span className="text-sm font-medium">Account</span>
+                  <ChevronDown
+                    className={`h-4 w-4 ml-1 transition-transform duration-200 ${
+                      isUserMenuOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 border border-gray-100 animate-fade-in">
+                    <Link
+                      to="/profile"
+                      className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <User className="h-4 w-4 mr-3 text-gray-400" />
+                      My Account
+                    </Link>
+                    <Link
+                      to="/orders"
+                      className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      <Package className="h-4 w-4 mr-3 text-gray-400" />
+                      My Orders
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center w-full px-4 py-3 text-sm text-error hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut className="h-4 w-4 mr-3" />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link
+                to="/login"
                 className="flex items-center hover:text-gray-200 transition-colors focus:outline-none"
               >
                 <User className="h-5 w-5 mr-1" />
-                <span className="text-sm font-medium">Account</span>
-                <ChevronDown
-                  className={`h-4 w-4 ml-1 transition-transform duration-200 ${
-                    isUserMenuOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {/* Dropdown Menu */}
-              {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 border border-gray-100 animate-fade-in">
-                  <Link
-                    to="/profile"
-                    className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setIsUserMenuOpen(false)}
-                  >
-                    <User className="h-4 w-4 mr-3 text-gray-400" />
-                    My Account
-                  </Link>
-                  <Link
-                    to="/orders"
-                    className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setIsUserMenuOpen(false)}
-                  >
-                    <Package className="h-4 w-4 mr-3 text-gray-400" />
-                    My Orders
-                  </Link>
-                  <div className="border-t border-gray-100 my-1"></div>
-                  <Link
-                    to="/admin"
-                    className="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setIsUserMenuOpen(false)}
-                  >
-                    <Settings className="h-4 w-4 mr-3 text-gray-400" />
-                    <span>Admin Panel</span>
-                    <span className="ml-auto text-xs bg-cta text-white px-2 py-0.5 rounded">
-                      Temp
-                    </span>
-                  </Link>
-                  <div className="border-t border-gray-100 my-1"></div>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center w-full px-4 py-3 text-sm text-error hover:bg-red-50 transition-colors"
-                  >
-                    <LogOut className="h-4 w-4 mr-3" />
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+                <span className="text-sm font-medium">Sign In</span>
+              </Link>
+            )}
 
             <Link
               to="/wishlist"

@@ -9,8 +9,10 @@ export function ProductCard({ product }) {
   const { addToCart } = useCart()
 
   const handleAddToCart = (e) => {
-    e.preventDefault() // Prevent navigation to details page
-    addToCart(product)
+    e.preventDefault(); // Prevent navigation to details page
+    e.stopPropagation(); // Prevent event bubbling to Link
+    console.log('handleAddToCart fired for product:', product.id);
+    addToCart(product);
   }
 
   return (
