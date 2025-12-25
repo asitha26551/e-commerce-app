@@ -1,6 +1,6 @@
 // CartContext.jsx
 import React, { useEffect, useState, createContext, useContext } from 'react'
-import { fetchUserCart, addToUserCart, updateUserCart } from '../services/api'
+import { fetchUserCart, addToUserCart, updateUserCart, fetchAllProducts } from '../services/api'
 
 export const CartContext = createContext(undefined)
 
@@ -12,14 +12,43 @@ export function CartProvider({ children }) {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      fetchUserCart(token)
-        .then(res => {
-          if (res.data.success && res.data.cartData) {
-            const cartArr = Object.entries(res.data.cartData).map(([id, quantity]) => ({ id, quantity }));
-            setItems(cartArr);
-          }
+      // For logged-in users, load cart quantities and enrich with product data
+      Promise.all([fetchUserCart(token), fetchAllProducts()])
+        .then(([cartRes, productsRes]) => {
+          if (!cartRes.data.success || !cartRes.data.cartData) return;
+
+          const products = Array.isArray(productsRes.data.products) ? productsRes.data.products : [];
+
+          const mappedProducts = products.map(p => ({
+            id: p._id,
+            name: p.name,
+            price: p.price,
+            stock: p.stock,
+            category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+            images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+            rating: 4.5,
+            description: p.description || ''
+          }));
+
+          console.log('DEBUG cartData:', cartRes.data.cartData);
+          console.log('DEBUG mappedProducts:', mappedProducts);
+
+          const cartArr = Object.entries(cartRes.data.cartData)
+            .map(([id, quantity]) => {
+              // Try both string and ObjectId matching
+              const product = mappedProducts.find(p => p.id == id || String(p.id) === String(id));
+              if (!product) {
+                console.warn('No product found for cart id', id);
+                return null;
+              }
+              return { ...product, quantity };
+            })
+            .filter(Boolean);
+
+          console.log('DEBUG cartArr:', cartArr);
+          setItems(cartArr);
         })
-        .catch(() => {});
+        .catch((e) => { console.error('CartContext fetch error', e); });
     } else {
       const savedCart = localStorage.getItem('cart');
       if (savedCart) {
@@ -46,9 +75,33 @@ export function CartProvider({ children }) {
       for (let i = 0; i < quantity; i++) {
         await addToUserCart(product.id, token);
       }
-      const res = await fetchUserCart(token);
-      if (res.data.success && res.data.cartData) {
-        const cartArr = Object.entries(res.data.cartData).map(([id, quantity]) => ({ id, quantity }));
+      // Refresh cart from backend and enrich with product details
+      const [cartRes, productsRes] = await Promise.all([
+        fetchUserCart(token),
+        fetchAllProducts(),
+      ]);
+
+      if (cartRes.data.success && cartRes.data.cartData) {
+        const products = Array.isArray(productsRes.data.products) ? productsRes.data.products : [];
+        const mappedProducts = products.map(p => ({
+          id: p._id,
+          name: p.name,
+          price: p.price,
+          stock: p.stock,
+          category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+          images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+          rating: 4.5,
+          description: p.description || ''
+        }));
+
+        const cartArr = Object.entries(cartRes.data.cartData)
+          .map(([id, qty]) => {
+            const prod = mappedProducts.find(p => String(p.id) === String(id));
+            if (!prod) return null;
+            return { ...prod, quantity: qty };
+          })
+          .filter(Boolean);
+
         setItems(cartArr);
       }
     } else {
@@ -74,9 +127,32 @@ export function CartProvider({ children }) {
     const token = localStorage.getItem('token');
     if (token) {
       await updateUserCart(productId, 0, token);
-      const res = await fetchUserCart(token);
-      if (res.data.success && res.data.cartData) {
-        const cartArr = Object.entries(res.data.cartData).map(([id, quantity]) => ({ id, quantity }));
+      const [cartRes, productsRes] = await Promise.all([
+        fetchUserCart(token),
+        fetchAllProducts(),
+      ]);
+
+      if (cartRes.data.success && cartRes.data.cartData) {
+        const products = Array.isArray(productsRes.data.products) ? productsRes.data.products : [];
+        const mappedProducts = products.map(p => ({
+          id: p._id,
+          name: p.name,
+          price: p.price,
+          stock: p.stock,
+          category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+          images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+          rating: 4.5,
+          description: p.description || ''
+        }));
+
+        const cartArr = Object.entries(cartRes.data.cartData)
+          .map(([id, qty]) => {
+            const prod = mappedProducts.find(p => String(p.id) === String(id));
+            if (!prod) return null;
+            return { ...prod, quantity: qty };
+          })
+          .filter(Boolean);
+
         setItems(cartArr);
       }
     } else {
@@ -89,9 +165,32 @@ export function CartProvider({ children }) {
     const token = localStorage.getItem('token');
     if (token) {
       await updateUserCart(productId, quantity, token);
-      const res = await fetchUserCart(token);
-      if (res.data.success && res.data.cartData) {
-        const cartArr = Object.entries(res.data.cartData).map(([id, quantity]) => ({ id, quantity }));
+      const [cartRes, productsRes] = await Promise.all([
+        fetchUserCart(token),
+        fetchAllProducts(),
+      ]);
+
+      if (cartRes.data.success && cartRes.data.cartData) {
+        const products = Array.isArray(productsRes.data.products) ? productsRes.data.products : [];
+        const mappedProducts = products.map(p => ({
+          id: p._id,
+          name: p.name,
+          price: p.price,
+          stock: p.stock,
+          category: p.categoryId && p.categoryId.name ? p.categoryId.name : '',
+          images: p.images && p.images.length ? p.images.map(img => img.imageUrl) : [],
+          rating: 4.5,
+          description: p.description || ''
+        }));
+
+        const cartArr = Object.entries(cartRes.data.cartData)
+          .map(([id, qty]) => {
+            const prod = mappedProducts.find(p => String(p.id) === String(id));
+            if (!prod) return null;
+            return { ...prod, quantity: qty };
+          })
+          .filter(Boolean);
+
         setItems(cartArr);
       }
     } else {
