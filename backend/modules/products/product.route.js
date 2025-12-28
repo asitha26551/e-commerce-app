@@ -10,7 +10,7 @@ productRouter.post('/', adminAuth,upload.fields([
     {name:'image2', maxCount:1},
     {name:'image3', maxCount:1}, 
     {name:'image4', maxCount:1}]
-), addProduct);               
+), adminAuth, addProduct);               
 productRouter.get('/', getAllProducts);            
 productRouter.get('/:id', getProductById);         
 productRouter.delete('/:id', adminAuth, removeProductById);  

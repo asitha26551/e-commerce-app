@@ -9,8 +9,7 @@ import { useCart } from '../../context/CartContext'
 export function CartSummary() {
   const { cartTotal } = useCart()
   const shipping = cartTotal > 50 ? 0 : 10
-  const tax = cartTotal * 0.08
-  const total = cartTotal + shipping + tax
+  const total = cartTotal + shipping
 
   return (
     <div className="bg-gray-50 rounded-lg p-6 h-fit sticky top-24">
@@ -25,10 +24,7 @@ export function CartSummary() {
           <span>Shipping Estimate</span>
           <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
         </div>
-        <div className="flex justify-between text-sm text-gray-600">
-          <span>Tax Estimate</span>
-          <span>${tax.toFixed(2)}</span>
-        </div>
+        {/* Tax Estimate removed */}
 
         <div className="border-t border-gray-200 pt-4 flex justify-between text-base font-bold text-gray-900">
           <span>Order Total</span>
@@ -37,13 +33,6 @@ export function CartSummary() {
       </div>
 
       <div className="mt-6">
-        <div className="flex space-x-2 mb-4">
-          <Input placeholder="Coupon code" fullWidth className="mb-0" />
-          <Button variant="secondary" size="md">
-            Apply
-          </Button>
-        </div>
-
         <Link to="/checkout">
           <Button
             variant="cta"
