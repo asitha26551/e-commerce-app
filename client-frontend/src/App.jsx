@@ -15,6 +15,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { AboutPage } from './pages/AboutPage'
 import { ContactPage } from './pages/ContactPage'
 import { OrderHistoryPage } from './pages/OrderHistoryPage'
+import { OrderDetailsPage } from './pages/OrderDetailsPage'
 
 export function App() {
 
@@ -41,6 +42,7 @@ export function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/orders" element={<OrderHistoryPage />} />
+          <Route path="/orders/:id" element={<OrderDetailsPage />} />
 
         </Routes>
       </Router>

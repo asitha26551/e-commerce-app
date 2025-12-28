@@ -9,6 +9,7 @@ import categoryRouter from './modules/categories/category.route.js';
 import subcategoryRouter from './modules/categories/subcategory.route.js';
 import productTypeRouter from './modules/categories/productType.route.js';
 import cartRouter from './modules/cart/cart.route.js';
+import orderRouter from './modules/orders/order.route.js';
 
 // App config
 const app = express()
@@ -30,6 +31,8 @@ app.use('/api/subcategory', subcategoryRouter);
 app.use('/api/product-type', productTypeRouter);
 
 app.use('/api/cart', cartRouter);
+
+app.use('/api/order', orderRouter);
 
 app.get('/', (req,res) =>{
     res.send("API working")

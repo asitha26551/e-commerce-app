@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { User, Package, MapPin, Lock, LogOut } from 'lucide-react'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
+import api from '../services/api'
 
 export function ProfilePage() {
   const [activeTab, setActiveTab] = useState('profile')
+  const [orders, setOrders] = useState([])
+  const [ordersLoading, setOrdersLoading] = useState(false)
+  const [ordersError, setOrdersError] = useState('')
 
   const tabs = [
     { id: 'profile', label: 'Profile', icon: User },
@@ -14,6 +18,24 @@ export function ProfilePage() {
     { id: 'addresses', label: 'Addresses', icon: MapPin },
     { id: 'security', label: 'Security', icon: Lock },
   ]
+
+  useEffect(() => {
+    if (activeTab === 'orders') {
+      setOrdersLoading(true);
+      setOrdersError('');
+      const fetchOrders = async () => {
+        try {
+          const token = localStorage.getItem('token');
+          const res = await api.get('/order/user', { headers: { token } });
+          setOrders(res.data.orders || []);
+        } catch (err) {
+          setOrdersError('Failed to fetch orders');
+        }
+        setOrdersLoading(false);
+      };
+      fetchOrders();
+    }
+  }, [activeTab]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -76,41 +98,44 @@ export function ProfilePage() {
                 <h2 className="text-xl font-bold text-gray-900 mb-6">
                   Order History
                 </h2>
-                <div className="space-y-4">
-                  {[1, 2].map((order) => (
-                    <div
-                      key={order}
-                      className="border border-gray-200 rounded-lg p-6"
-                    >
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <p className="font-bold text-gray-900">
-                            Order #ORD-{2023000 + order}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Placed on Oct {10 + order}, 2023
-                          </p>
+                {ordersLoading ? (
+                  <div>Loading...</div>
+                ) : ordersError ? (
+                  <div className="text-red-600">{ordersError}</div>
+                ) : (
+                  <div className="space-y-4">
+                    {orders.length === 0 ? (
+                      <div>No orders found.</div>
+                    ) : (
+                      orders.map((order) => (
+                        <div key={order._id} className="border border-gray-200 rounded-lg p-6">
+                          <div className="flex justify-between items-center mb-4">
+                            <div>
+                              <p className="font-bold text-gray-900">
+                                Order #{order._id.slice(-6)}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                Placed on {new Date(order.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                            <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                              order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                              order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                              order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                              'bg-yellow-100 text-yellow-800'
+                            }`}>
+                              {order.status}
+                            </span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-2xl font-bold text-gray-900">${order.total?.toFixed(2) ?? '0.00'}</span>
+                            {/* <Button variant="outline" size="sm">View Details</Button> */}
+                          </div>
                         </div>
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-success">
-                          Delivered
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between border-t border-gray-100 pt-4">
-                        <div className="flex -space-x-2">
-                          {[1, 2, 3].map((i) => (
-                            <div
-                              key={i}
-                              className="h-10 w-10 rounded-full border-2 border-white bg-gray-200"
-                            />
-                          ))}
-                        </div>
-                        <Button variant="outline" size="sm">
-                          View Details
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                      ))
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
