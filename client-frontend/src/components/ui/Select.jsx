@@ -19,7 +19,7 @@ export function Select({
       {label && (
         <label
           htmlFor={selectId}
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-text-secondary mb-1"
         >
           {label}
         </label>
@@ -28,9 +28,9 @@ export function Select({
         <select
           id={selectId}
           className={`
-            block w-full rounded-md border-gray-300 shadow-sm appearance-none
-            focus:border-accent focus:ring-accent sm:text-sm p-2 border pr-10
-            disabled:bg-gray-100 disabled:text-gray-500
+            block w-full rounded-md border border-border bg-surface text-text shadow-sm appearance-none
+            focus:border-accent focus:ring-accent sm:text-sm p-2 pr-10
+            disabled:bg-background disabled:text-text-secondary
             ${error ? 'border-error focus:border-error focus:ring-error' : ''}
             ${className}
           `}
@@ -42,7 +42,7 @@ export function Select({
             </option>
           ))}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-text-secondary">
           <ChevronDown className="h-4 w-4" />
         </div>
       </div>

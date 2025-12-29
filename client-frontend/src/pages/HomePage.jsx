@@ -6,19 +6,17 @@ import {
   Truck,
   Shield,
   RefreshCw,
-  Clock
+  Clock,
+  Zap,
+  Cpu,
+  Gamepad2,
 } from 'lucide-react'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { ProductCard } from '../components/product/ProductCard'
 import { CategoryCard } from '../components/category/CategoryCard'
 import { Button } from '../components/ui/Button'
-import axios from 'axios'
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || '/api',
-})
-
+import api from '../services/api'
 
 export function HomePage() {
   const [products, setProducts] = useState([])
@@ -30,9 +28,9 @@ export function HomePage() {
     const fetchData = async () => {
       try {
         const [productsRes, categoriesRes, bestSellersRes] = await Promise.all([
-          api.get('/api/product'),
-          api.get('/api/categories'),
-          api.get('/api/product/bestsellers'),
+          api.get('/product'),
+          api.get('/categories'),
+          api.get('/product/bestsellers'),
         ])
 
         const productsArr = Array.isArray(productsRes.data.products)
@@ -40,13 +38,13 @@ export function HomePage() {
           : []
 
         setProducts(
-          productsArr.map(p => ({
+          productsArr.map((p) => ({
             id: p._id,
             name: p.name,
             price: p.price,
             stock: p.stock,
             category: p.categoryId?.name || '',
-            images: p.images?.map(img => img.imageUrl) || [],
+            images: p.images?.map((img) => img.imageUrl) || [],
             rating: 4.5,
             description: p.description || '',
           }))
@@ -57,13 +55,13 @@ export function HomePage() {
           : []
 
         setCategories(
-          categoriesArr.map(c => ({
+          categoriesArr.map((c) => ({
             id: c._id,
             name: c.name,
             image:
               c.image ||
               'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=500',
-            productCount: c.subcategories?.length || 0,
+            itemCount: c.subcategories?.length || 0,
           }))
         )
 
@@ -72,13 +70,13 @@ export function HomePage() {
           : []
 
         setBestSellers(
-          bestSellersArr.map(p => ({
+          bestSellersArr.map((p) => ({
             id: p._id,
             name: p.name,
             price: p.price,
             stock: p.stock,
             category: p.categoryId?.name || '',
-            images: p.images?.map(img => img.imageUrl) || [],
+            images: p.images?.map((img) => img.imageUrl) || [],
             rating: 4.5,
             description: p.description || '',
           }))
@@ -89,12 +87,13 @@ export function HomePage() {
         setLoading(false)
       }
     }
+
     fetchData()
   }, [])
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-background text-text">
         <Navbar />
         <div className="flex-grow flex items-center justify-center text-gray-500">
           Loading...
@@ -107,181 +106,197 @@ export function HomePage() {
   const featuredProducts = products.slice(0, 4)
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background text-text selection:bg-primary selection:text-white">
       <Navbar />
 
-      {/* HERO */}
-      <section className="relative bg-primary text-white">
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative max-w-7xl mx-auto px-6 py-24">
-          <h1 className="text-5xl font-bold mb-6">
-            Discover the Best <span className="text-cta">Deals Online</span>
-          </h1>
-          <p className="text-lg mb-8 max-w-xl">
-            Shop premium products with fast delivery and secure payments.
-          </p>
-          <Link to="/products">
-            <Button size="lg" variant="cta">
-              Shop Now <ArrowRight className="ml-2" />
-            </Button>
-          </Link>
-        </div>
-      </section>
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="relative bg-background overflow-hidden min-h-[600px] flex items-center">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-transparent"></div>
+          <div className="absolute inset-0 scan-lines"></div>
 
-      {/* FEATURES */}
-      <section className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-6 py-10 grid md:grid-cols-4 gap-6">
-          {[
-            { icon: Truck, title: 'Fast Delivery', desc: 'Quick & reliable shipping' },
-            { icon: Shield, title: 'Secure Payments', desc: '100% protected' },
-            { icon: RefreshCw, title: 'Easy Returns', desc: '30-day returns' },
-            { icon: Clock, title: '24/7 Support', desc: 'Always here to help' },
-          ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex items-center gap-4">
-              <Icon className="text-primary" />
-              <div>
-                <h4 className="font-semibold">{title}</h4>
-                <p className="text-sm text-gray-500">{desc}</p>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+            <div className="max-w-3xl">
+              <div className="inline-block px-3 py-1 mb-4 border border-accent/50 rounded-full bg-accent/10 backdrop-blur-sm">
+                <span className="text-accent font-bold tracking-wider text-sm uppercase">
+                  Next Gen Gaming Gear
+                </span>
+              </div>
+              <h1 className="text-5xl md:text-7xl font-display font-black mb-6 leading-tight text-white">
+                LEVEL UP YOUR <br />
+                <span className="gradient-text text-shadow-glow">
+                  BATTLE STATION
+                </span>
+              </h1>
+              <p className="text-xl text-gray-300 mb-8 max-w-xl leading-relaxed">
+                Dominate the competition with high-performance peripherals.
+                Precision engineered for the ultimate gaming experience.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/products">
+                  <Button size="lg" variant="cta" className="w-full sm:w-auto">
+                    Shop Now <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CATEGORIES */}
-      <section className="py-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between mb-6">
-            <h2 className="text-2xl font-bold">Shop by Category</h2>
-            <Link to="/products" className="text-accent text-sm font-medium">
-              View All →
-            </Link>
           </div>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-            {categories.length === 0 ? (
-              <div className="col-span-full text-gray-400 text-center py-6">
-                No categories found.
-              </div>
-            ) : (
-              categories.slice(0, 12).map(c => (
-                <div key={c.id} className="bg-white rounded-lg shadow-sm flex flex-col items-center p-2 sm:p-3 hover:shadow-md transition-all cursor-pointer">
-                  <img
-                    src={c.image}
-                    alt={c.name}
-                    className="w-12 h-12 object-cover rounded mb-2 border"
-                  />
-                  <span className="text-xs font-medium text-gray-700 text-center line-clamp-2">{c.name}</span>
+        </section>
+
+        {/* Features Bar */}
+        <section className="bg-surface border-y border-border relative z-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div className="flex items-center space-x-4 group">
+                <div className="bg-background p-3 rounded-lg border border-border group-hover:border-primary group-hover:shadow-neon-purple transition-all">
+                  <Truck className="h-6 w-6 text-primary" />
                 </div>
-              ))
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURED PRODUCTS */}
-      <section className="py-8 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-8">Featured Products</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.length === 0 ? (
-              <div className="col-span-full text-gray-400 text-center py-8">
-                No featured products found.
+                <div>
+                  <h3 className="font-display font-bold text-white group-hover:text-primary transition-colors">
+                    Fast Shipping
+                  </h3>
+                  <p className="text-sm text-gray-400">
+                    Overnight delivery available
+                  </p>
+                </div>
               </div>
-            ) : (
-              featuredProducts.map(p => (
-                <ProductCard key={p.id} product={p} />
-              ))
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* BEST SELLERS */}
-      <section className="py-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-8">Best Sellers</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {bestSellers.length === 0 ? (
-              <div className="col-span-full text-gray-400 text-center py-8">
-                No best sellers found.
+              <div className="flex items-center space-x-4 group">
+                <div className="bg-background p-3 rounded-lg border border-border group-hover:border-success group-hover:shadow-neon-lime transition-all">
+                  <Shield className="h-6 w-6 text-success" />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-white group-hover:text-success transition-colors">
+                    Secure Checkout
+                  </h3>
+                  <p className="text-sm text-gray-400">256-bit encryption</p>
+                </div>
               </div>
-            ) : (
-              bestSellers.map(p => (
-                <ProductCard key={p.id} product={p} />
-              ))
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* WHY CHOOSE US */}
-      <section className="py-20 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-4">Why Choose Us</h2>
-        <p className="text-gray-600 max-w-2xl mx-auto mb-10">
-          Trusted by thousands, we deliver quality products with unmatched service.
-        </p>
-        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <div>
-            <p className="text-4xl font-bold text-primary">10k+</p>
-            <p>Happy Customers</p>
-          </div>
-          <div>
-            <p className="text-4xl font-bold text-primary">500+</p>
-            <p>Products</p>
-          </div>
-          <div>
-            <p className="text-4xl font-bold text-primary">99%</p>
-            <p>Satisfaction</p>
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            What Customers Say
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              'Amazing quality and fast delivery!',
-              'Excellent support and great products.',
-              'Best online shopping experience!',
-            ].map((t, i) => (
-              <div key={i} className="bg-white p-6 rounded shadow">
-                <p className="mb-4">“{t}”</p>
-                <p className="font-semibold">Verified Buyer</p>
+              <div className="flex items-center space-x-4 group">
+                <div className="bg-background p-3 rounded-lg border border-border group-hover:border-cta group-hover:shadow-neon-lime transition-all">
+                  <RefreshCw className="h-6 w-6 text-cta" />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-white group-hover:text-cta transition-colors">
+                    Easy Returns
+                  </h3>
+                  <p className="text-sm text-gray-400">30-day money back</p>
+                </div>
               </div>
-            ))}
+              <div className="flex items-center space-x-4 group">
+                <div className="bg-background p-3 rounded-lg border border-border group-hover:border-accent group-hover:shadow-neon-cyan transition-all">
+                  <Zap className="h-6 w-6 text-accent" />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-white group-hover:text-accent transition-colors">
+                    24/7 Support
+                  </h3>
+                  <p className="text-sm text-gray-400">Expert gamers online</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="py-20 bg-primary text-white text-center">
-        <h2 className="text-4xl font-bold mb-4">Ready to Start Shopping?</h2>
-        <Link to="/products">
-          <Button size="lg" variant="cta">
-            Browse Products
-          </Button>
-        </Link>
-      </section>
+        {/* Categories */}
+        <section className="py-20 bg-background relative">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-end mb-10">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">
+                  Shop by <span className="text-primary">Category</span>
+                </h2>
+                <div className="h-1 w-20 bg-primary rounded-full"></div>
+              </div>
+              <Link
+                to="/products"
+                className="text-accent font-bold hover:text-white flex items-center transition-colors"
+              >
+                View All <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categories.slice(0, 6).map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
+            </div>
+          </div>
+        </section>
 
-      {/* NEWSLETTER */}
-      <section className="py-16 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-        <p className="text-gray-600 mb-6">
-          Subscribe for exclusive offers.
-        </p>
-        <div className="flex justify-center gap-4">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="border px-4 py-3 rounded-md w-64"
-          />
-          <Button>Subscribe</Button>
-        </div>
-      </section>
+        {/* Featured Products */}
+        <section className="py-20 bg-surface relative overflow-hidden">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
+                Featured <span className="text-accent">Gear</span>
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto">
+                Top-rated equipment chosen by pro players and streamers.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Promo Banner (commented out)
+        <section className="py-20 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-surface rounded-2xl overflow-hidden relative border border-border shadow-neon-purple group">
+              <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-40 group-hover:scale-105 transition-transform duration-700"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
+
+              <div className="relative z-10 px-8 py-16 md:px-16 md:py-24 text-center md:text-left max-w-2xl">
+                <div className="inline-flex items-center space-x-2 text-cta font-bold mb-4">
+                  <Cpu className="h-5 w-5" />
+                  <span>LIMITED TIME OFFER</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-display font-black text-white mb-6 leading-tight">
+                  UPGRADE YOUR <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                    PERFORMANCE
+                  </span>
+                </h2>
+                <p className="text-xl text-gray-300 mb-8">
+                  Get up to 50% off on selected gaming peripherals. Don't let
+                  your gear hold you back.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button variant="cta" size="lg">
+                    Shop the Sale
+                  </Button>
+                  <Button variant="outline" size="lg">
+                    Learn More
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        */}
+
+        {/* Best Sellers */}
+        <section className="py-20 bg-background relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center space-x-4 mb-10">
+              <Gamepad2 className="h-8 w-8 text-primary" />
+              <h2 className="text-3xl md:text-4xl font-display font-bold text-white">
+                Best <span className="text-cta">Sellers</span>
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {bestSellers.slice(0, 4).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      </main>
 
       <Footer />
     </div>

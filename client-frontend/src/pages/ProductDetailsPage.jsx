@@ -101,7 +101,7 @@ export function ProductDetailsPage() {
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
         <main className="flex-grow flex items-center justify-center">
-          <p className="text-gray-500 text-lg">Loading product...</p>
+          <p className="text-text-secondary text-lg">Loading product...</p>
         </main>
         <Footer />
       </div>
@@ -113,7 +113,7 @@ export function ProductDetailsPage() {
       <div className="min-h-screen flex flex-col bg-background">
         <Navbar />
         <main className="flex-grow flex items-center justify-center">
-          <p className="text-gray-500 text-lg">Product not found</p>
+          <p className="text-error text-lg">Product not found</p>
         </main>
         <Footer />
       </div>
@@ -126,7 +126,7 @@ export function ProductDetailsPage() {
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         {/* Breadcrumbs */}
-        <nav className="text-sm text-gray-500 mb-8">
+        <nav className="text-sm text-text-secondary mb-8">
           <ol className="flex items-center space-x-2">
             <li>
               <a href="/" className="hover:text-primary">Home</a>
@@ -156,7 +156,7 @@ export function ProductDetailsPage() {
 
           {/* Right Column: Product Info */}
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+            <h1 className="text-3xl font-bold text-white mb-4">{product.name}</h1>
 
             {/* Rating */}
             <div className="flex items-center mb-6">
@@ -164,22 +164,22 @@ export function ProductDetailsPage() {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-5 w-5 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}`}
+                    className={`h-5 w-5 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-border'}`}
                   />
                 ))}
               </div>
-              <span className="text-sm text-gray-500 hover:text-primary cursor-pointer">
+              <span className="text-sm text-text-secondary hover:text-primary cursor-pointer">
                 {product.reviewCount} reviews
               </span>
             </div>
 
             {/* Price and Stock */}
             <div className="flex items-baseline mb-6 gap-6">
-              <span className="text-4xl font-bold text-gray-900 mr-4">
+              <span className="text-4xl font-bold text-white mr-4">
                 ${product.price.toFixed(2)}
               </span>
               {product.originalPrice && (
-                <span className="text-xl text-gray-400 line-through">
+                <span className="text-xl text-text-secondary line-through">
                   ${product.originalPrice.toFixed(2)}
                 </span>
               )}
@@ -188,18 +188,18 @@ export function ProductDetailsPage() {
                   Save {product.discount}%
                 </span>
               )}
-              <span className="text-sm text-gray-500 ml-4">Stock: <span className="font-semibold text-gray-700">{product.stock}</span></span>
+              <span className="text-sm text-text-secondary ml-4">Stock: <span className="font-semibold text-white">{product.stock}</span></span>
             </div>
 
             {/* Description */}
-            <p className="text-gray-600 mb-8 leading-relaxed">{product.description}</p>
+            <p className="text-text-secondary mb-8 leading-relaxed">{product.description}</p>
 
             {/* Quantity */}
             <div className="mb-8">
-              <h3 className="text-sm font-medium text-gray-900 mb-3">Quantity</h3>
-              <div className="flex items-center border border-gray-300 rounded-md w-32">
+              <h3 className="text-sm font-medium text-white mb-3">Quantity</h3>
+              <div className="flex items-center border border-border rounded-md w-32 bg-surface">
                 <button
-                  className="px-3 py-2 text-gray-600 hover:bg-gray-100 border-r border-gray-300"
+                  className="px-3 py-2 text-text-secondary hover:bg-background border-r border-border"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 >
                   -
@@ -208,16 +208,16 @@ export function ProductDetailsPage() {
                   type="text"
                   value={quantity}
                   readOnly
-                  className="w-full text-center text-gray-900 font-medium focus:outline-none"
+                  className="w-full text-center text-white font-medium focus:outline-none bg-transparent"
                 />
                 <button
-                  className="px-3 py-2 text-gray-600 hover:bg-gray-100 border-l border-gray-300"
+                  className="px-3 py-2 text-text-secondary hover:bg-background border-l border-border"
                   onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
                 >
                   +
                 </button>
               </div>
-              <p className="text-xs text-gray-500 mt-2">{product.stock} items available</p>
+              <p className="text-xs text-text-secondary mt-2">{product.stock} items available</p>
             </div>
 
             {/* Actions */}
@@ -228,25 +228,25 @@ export function ProductDetailsPage() {
               <Button variant="secondary" size="lg" className="flex-1">
                 Buy Now
               </Button>
-              <button className="p-3 border border-gray-300 rounded-md hover:bg-gray-50 text-gray-600">
+              <button className="p-3 border border-border rounded-md hover:bg-surface text-text-secondary">
                 <Heart className="h-6 w-6" />
               </button>
             </div>
 
             {/* Features */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-gray-100">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-border">
               <div className="flex items-start space-x-3">
                 <Truck className="h-5 w-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-gray-900">Free Delivery</h4>
-                  <p className="text-sm text-gray-500">Enter your postal code for delivery availability</p>
+                  <h4 className="font-medium text-white">Free Delivery</h4>
+                  <p className="text-sm text-text-secondary">Enter your postal code for delivery availability</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
                 <RefreshCw className="h-5 w-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-gray-900">Return Delivery</h4>
-                  <p className="text-sm text-gray-500">Free 30 days delivery returns</p>
+                  <h4 className="font-medium text-white">Return Delivery</h4>
+                  <p className="text-sm text-text-secondary">Free 30 days delivery returns</p>
                 </div>
               </div>
             </div>

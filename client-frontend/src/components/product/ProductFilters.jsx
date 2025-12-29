@@ -115,10 +115,10 @@ export function ProductFilters({
   }
 
   return (
-    <div className={`space-y-8 ${mobile ? 'p-4' : ''}`}>
+    <div className={`space-y-8 ${mobile ? 'p-4' : ''} text-text-secondary`}>
       {/* Categories */}
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Categories</h3>
+        <h3 className="text-lg font-medium text-white mb-4">Categories</h3>
         <ul className="space-y-3">
           <li>
             <button
@@ -126,7 +126,7 @@ export function ProductFilters({
               className={`text-sm ${
                 !selectedCategory
                   ? 'text-accent font-bold'
-                  : 'text-gray-600 hover:text-gray-900'
+                  : 'text-text-secondary hover:text-white'
               }`}
             >
               All Categories
@@ -139,7 +139,7 @@ export function ProductFilters({
                 className={`text-sm flex items-center ${
                   selectedCategory === category.name
                     ? 'text-accent font-bold'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-text-secondary hover:text-white'
                 }`}
               >
                 {category.name}
@@ -155,7 +155,7 @@ export function ProductFilters({
       {/* Subcategories - shown when a category is selected */}
       {selectedCategoryId && subcategories.length > 0 && (
         <div className="pl-4 border-l-2 border-accent">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Subcategories</h3>
+          <h3 className="text-lg font-medium text-white mb-4">Subcategories</h3>
           <ul className="space-y-3">
             {subcategories.map((subcategory) => (
               <li key={subcategory._id}>
@@ -164,7 +164,7 @@ export function ProductFilters({
                   className={`text-sm flex items-center ${
                     selectedSubcategory === subcategory.name
                       ? 'text-accent font-bold'
-                      : 'text-gray-600 hover:text-gray-900'
+                      : 'text-text-secondary hover:text-white'
                   }`}
                 >
                   {subcategory.name}
@@ -181,7 +181,7 @@ export function ProductFilters({
       {/* Product Types - shown when a subcategory is selected */}
       {selectedSubcategoryId && productTypes.length > 0 && (
         <div className="pl-8 border-l-2 border-accent">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Product Types</h3>
+          <h3 className="text-lg font-medium text-white mb-4">Product Types</h3>
           <ul className="space-y-3">
             {productTypes.map((productType) => (
               <li key={productType._id}>
@@ -190,7 +190,7 @@ export function ProductFilters({
                   className={`text-sm ${
                     selectedProductType === productType.name
                       ? 'text-accent font-bold'
-                      : 'text-gray-600 hover:text-gray-900'
+                      : 'text-text-secondary hover:text-white'
                   }`}
                 >
                   {productType.name}
@@ -203,9 +203,9 @@ export function ProductFilters({
 
       {/* Price Range */}
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Price Range</h3>
+        <h3 className="text-lg font-medium text-white mb-4">Price Range</h3>
         <div className="space-y-4">
-          <div className="flex items-center justify-between text-sm text-gray-600">
+          <div className="flex items-center justify-between text-sm text-text-secondary">
             <span>${priceRange[0]}</span>
             <span>${priceRange[1]}</span>
           </div>
@@ -218,7 +218,7 @@ export function ProductFilters({
             onChange={(e) =>
               onPriceChange([priceRange[0], parseInt(e.target.value)])
             }
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-accent"
+            className="w-full h-2 bg-border rounded-lg appearance-none cursor-pointer accent-accent"
           />
         </div>
       </div>

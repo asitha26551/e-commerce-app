@@ -106,10 +106,10 @@ export function ProductListingPage() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-3xl font-bold text-white">
               {selectedCategory || 'All Products'}
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-text-secondary mt-1">
               {loading ? 'Loading...' : `Showing ${filteredProducts.length} results`}
             </p>
           </div>
@@ -159,7 +159,7 @@ export function ProductListingPage() {
           <div className="flex-1">
             {loading ? (
               <div className="text-center py-16">
-                <p className="text-gray-500 text-lg">Loading products...</p>
+                <p className="text-text-secondary text-lg">Loading products...</p>
               </div>
             ) : filteredProducts.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,8 +168,8 @@ export function ProductListingPage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 bg-white rounded-lg border border-gray-200">
-                <p className="text-gray-500 text-lg">
+              <div className="text-center py-16 bg-surface rounded-lg border border-border">
+                <p className="text-text-secondary text-lg">
                   No products found matching your criteria.
                 </p>
                 <Button
@@ -198,11 +198,11 @@ export function ProductListingPage() {
             className="fixed inset-0 bg-black bg-opacity-50"
             onClick={() => setIsMobileFiltersOpen(false)}
           />
-          <div className="relative ml-auto w-80 max-w-full bg-white h-full shadow-xl flex flex-col">
+          <div className="relative ml-auto w-80 max-w-full bg-surface h-full shadow-xl flex flex-col">
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-bold">Filters</h2>
+              <h2 className="text-lg font-bold text-white">Filters</h2>
               <button onClick={() => setIsMobileFiltersOpen(false)}>
-                <X className="h-6 w-6 text-gray-500" />
+                <X className="h-6 w-6 text-text-secondary" />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto">

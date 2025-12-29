@@ -27,54 +27,77 @@ export function OrderDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-background text-text">
         <Navbar />
-        <main className="flex-grow flex items-center justify-center text-lg text-gray-500">Loading order details...</main>
+        <main className="flex-grow flex items-center justify-center text-lg text-text-secondary">
+          Loading order details...
+        </main>
         <Footer />
       </div>
     );
   }
   if (error || !order) {
     return (
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="min-h-screen flex flex-col bg-background text-text">
         <Navbar />
-        <main className="flex-grow flex items-center justify-center text-lg text-red-600">{error || 'Order not found.'}</main>
+        <main className="flex-grow flex items-center justify-center text-lg text-error">
+          {error || 'Order not found.'}
+        </main>
         <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-background text-text">
       <Navbar />
       <main className="flex-grow max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link to="/orders" className="text-blue-600 hover:underline mb-6 inline-block">← Back to Order History</Link>
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Order Details</h1>
+        <Link to="/orders" className="text-accent hover:underline mb-6 inline-block">
+           Back to Order History
+        </Link>
+        <h1 className="text-3xl font-bold text-white mb-8">Order Details</h1>
         {/* Order Summary */}
         <section className="mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Order #{order._id.slice(-6)}</h2>
-              <p className="text-sm text-gray-500">Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
+              <h2 className="text-lg font-semibold text-white">Order #{order._id.slice(-6)}</h2>
+              <p className="text-sm text-text-secondary">Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
             </div>
-            <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold capitalize
-              ${order.status === 'delivered' ? 'bg-green-100 text-green-700' :
-                order.status === 'shipped' ? 'bg-blue-100 text-blue-700' :
-                order.status === 'cancelled' ? 'bg-red-100 text-red-700' :
-                'bg-yellow-100 text-yellow-700'}`}>{order.status}</span>
+            <span
+              className={`inline-flex items-center px-4 py-1.5 rounded-full text-sm font-semibold capitalize
+              ${order.status === 'delivered'
+                  ? 'bg-success/10 text-success'
+                  : order.status === 'shipped'
+                  ? 'bg-accent/10 text-accent'
+                  : order.status === 'cancelled'
+                  ? 'bg-error/10 text-error'
+                  : 'bg-cta/10 text-cta'}`}
+            >
+              {order.status}
+            </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
-            <div><span className="font-medium">Payment Method:</span> {order.paymentMethod}</div>
-            <div><span className="font-medium">Order Total:</span> ${order.total?.toFixed(2) ?? '0.00'}</div>
-            <div><span className="font-medium">Subtotal:</span> ${order.subtotal?.toFixed(2) ?? '0.00'}</div>
-            <div><span className="font-medium">Shipping Fee:</span> ${order.shippingFee?.toFixed(2) ?? '0.00'}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-text-secondary">
+            <div>
+              <span className="font-medium text-white">Payment Method:</span> {order.paymentMethod}
+            </div>
+            <div>
+              <span className="font-medium text-white">Order Total:</span> ${order.total?.toFixed(2) ?? '0.00'}
+            </div>
+            <div>
+              <span className="font-medium text-white">Subtotal:</span> ${order.subtotal?.toFixed(2) ?? '0.00'}
+            </div>
+            <div>
+              <span className="font-medium text-white">Shipping Fee:</span> ${order.shippingFee?.toFixed(2) ?? '0.00'}
+            </div>
           </div>
         </section>
         {/* Shipping Address */}
         <section className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Shipping Address</h3>
-          <div className="bg-white rounded-lg border p-4 text-gray-700">
-            <div><span className="font-medium">{order.shippingAddress.fullName}</span></div>
+          <h3 className="text-lg font-semibold text-white mb-2">Shipping Address</h3>
+          <div className="bg-surface rounded-lg border border-border p-4 text-text-secondary">
+            <div>
+              <span className="font-medium text-white">{order.shippingAddress.fullName}</span>
+            </div>
             <div>{order.shippingAddress.phone}</div>
             <div>{order.shippingAddress.line1}{order.shippingAddress.line2 ? `, ${order.shippingAddress.line2}` : ''}</div>
             <div>{order.shippingAddress.city}, {order.shippingAddress.postalCode}</div>
@@ -83,19 +106,19 @@ export function OrderDetailsPage() {
         </section>
         {/* Ordered Items */}
         <section className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Ordered Items</h3>
-          <div className="bg-white rounded-lg border p-4 divide-y">
+          <h3 className="text-lg font-semibold text-white mb-2">Ordered Items</h3>
+          <div className="bg-surface rounded-lg border border-border p-4 divide-y divide-border">
             {order.items && order.items.length > 0 ? order.items.map((item, idx) => (
               <div key={item._id || idx} className="flex flex-col sm:flex-row sm:items-center py-4 gap-4">
-                <img src={item.product?.images?.[0] || '/placeholder.png'} alt={item.product?.name} className="w-16 h-16 rounded border object-cover" />
+                <img src={item.product?.images?.[0] || '/placeholder.png'} alt={item.product?.name} className="w-16 h-16 rounded border border-border object-cover" />
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900">{item.product?.name}</div>
-                  {item.variant && <div className="text-xs text-gray-500">Variant: {item.variant.name}</div>}
-                  <div className="text-xs text-gray-500">Qty: {item.quantity}</div>
+                  <div className="font-medium text-white">{item.product?.name}</div>
+                  {item.variant && <div className="text-xs text-text-secondary">Variant: {item.variant.name}</div>}
+                  <div className="text-xs text-text-secondary">Qty: {item.quantity}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm">${item.priceEach?.toFixed(2) ?? '0.00'} each</div>
-                  <div className="text-xs text-gray-500">Line Total: ${(item.priceEach * item.quantity).toFixed(2)}</div>
+                  <div className="text-sm text-white">${item.priceEach?.toFixed(2) ?? '0.00'} each</div>
+                  <div className="text-xs text-text-secondary">Line Total: ${(item.priceEach * item.quantity).toFixed(2)}</div>
                 </div>
               </div>
             )) : <div className="text-gray-500">No items found.</div>}
@@ -103,11 +126,17 @@ export function OrderDetailsPage() {
         </section>
         {/* Payment Info */}
         <section>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Payment Information</h3>
-          <div className="bg-white rounded-lg border p-4 text-gray-700">
-            <div><span className="font-medium">Payment Method:</span> {order.paymentMethod}</div>
-            <div><span className="font-medium">Status:</span> {order.status}</div>
-            <div><span className="font-medium">Total Paid:</span> ${order.total?.toFixed(2) ?? '0.00'}</div>
+          <h3 className="text-lg font-semibold text-white mb-2">Payment Information</h3>
+          <div className="bg-surface rounded-lg border border-border p-4 text-text-secondary">
+            <div>
+              <span className="font-medium text-white">Payment Method:</span> {order.paymentMethod}
+            </div>
+            <div>
+              <span className="font-medium text-white">Status:</span> {order.status}
+            </div>
+            <div>
+              <span className="font-medium text-white">Total Paid:</span> ${order.total?.toFixed(2) ?? '0.00'}
+            </div>
           </div>
         </section>
       </main>

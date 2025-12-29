@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   ShoppingCart,
-  Heart,
   User,
   Search,
   Menu,
@@ -164,13 +163,6 @@ export function Navbar() {
             )}
 
             <Link
-              to="/wishlist"
-              className="flex items-center hover:text-gray-200 transition-colors"
-            >
-              <Heart className="h-5 w-5 mr-1" />
-              <span className="text-sm font-medium">Wishlist</span>
-            </Link>
-            <Link
               to="/cart"
               className="flex items-center hover:text-gray-200 transition-colors relative"
             >
@@ -262,14 +254,6 @@ export function Navbar() {
             >
               <Package className="h-5 w-5 mr-2" />
               My Orders
-            </Link>
-            <Link
-              to="/wishlist"
-              className="flex items-center text-white hover:bg-blue-800 px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <Heart className="h-5 w-5 mr-2" />
-              Wishlist
             </Link>
             <div className="border-t border-blue-800 my-2"></div>
             <Link
