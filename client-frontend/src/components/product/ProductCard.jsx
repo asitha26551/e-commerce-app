@@ -18,9 +18,9 @@ export function ProductCard({ product }) {
   return (
     <Link
       to={`/products/${product.id}`}
-      className="group block bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:scale-[1.02]"
+      className="group block bg-surface rounded-lg shadow-sm hover:shadow-neon-purple transition-all duration-300 overflow-hidden border border-border hover:scale-[1.02]"
     >
-      <div className="relative aspect-square overflow-hidden bg-gray-100">
+      <div className="relative aspect-square overflow-hidden bg-background">
         <img
           src={product.images[0]}
           alt={product.name}
@@ -49,8 +49,8 @@ export function ProductCard({ product }) {
       </div>
 
       <div className="p-4">
-        <div className="text-sm text-gray-500 mb-1">{product.category}</div>
-        <h3 className="text-lg font-medium text-text mb-2 line-clamp-1 group-hover:text-primary transition-colors">
+        <div className="text-sm text-text-secondary mb-1">{product.category}</div>
+        <h3 className="text-lg font-medium text-white mb-2 line-clamp-1 group-hover:text-accent transition-colors">
           {product.name}
         </h3>
 
@@ -59,22 +59,22 @@ export function ProductCard({ product }) {
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
-                className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-gray-300'}`}
+                className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-current' : 'text-border'}`}
               />
             ))}
           </div>
-          <span className="text-xs text-gray-500 ml-2">
-            ({product.reviewCount})
+          <span className="text-xs text-text-secondary ml-2">
+            ({product.reviewCount || 0})
           </span>
         </div>
 
         <div className="flex items-center justify-between">
           <div className="flex items-baseline space-x-2">
-            <span className="text-xl font-bold text-text">
+            <span className="text-xl font-bold text-white">
               ${product.price.toFixed(2)}
             </span>
             {product.originalPrice && (
-              <span className="text-sm text-gray-400 line-through">
+              <span className="text-sm text-text-secondary line-through">
                 ${product.originalPrice.toFixed(2)}
               </span>
             )}
