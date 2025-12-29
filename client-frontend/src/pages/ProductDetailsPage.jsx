@@ -173,8 +173,8 @@ export function ProductDetailsPage() {
               </span>
             </div>
 
-            {/* Price */}
-            <div className="flex items-baseline mb-6">
+            {/* Price and Stock */}
+            <div className="flex items-baseline mb-6 gap-6">
               <span className="text-4xl font-bold text-gray-900 mr-4">
                 ${product.price.toFixed(2)}
               </span>
@@ -188,6 +188,7 @@ export function ProductDetailsPage() {
                   Save {product.discount}%
                 </span>
               )}
+              <span className="text-sm text-gray-500 ml-4">Stock: <span className="font-semibold text-gray-700">{product.stock}</span></span>
             </div>
 
             {/* Description */}

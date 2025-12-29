@@ -19,17 +19,20 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL?.replace(/\/$/, '') || '/api',
 })
 
+
 export function HomePage() {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
+  const [bestSellers, setBestSellers] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [productsRes, categoriesRes] = await Promise.all([
+        const [productsRes, categoriesRes, bestSellersRes] = await Promise.all([
           api.get('/api/product'),
           api.get('/api/categories'),
+          api.get('/api/product/bestsellers'),
         ])
 
         const productsArr = Array.isArray(productsRes.data.products)
@@ -63,6 +66,23 @@ export function HomePage() {
             productCount: c.subcategories?.length || 0,
           }))
         )
+
+        const bestSellersArr = Array.isArray(bestSellersRes.data.products)
+          ? bestSellersRes.data.products
+          : []
+
+        setBestSellers(
+          bestSellersArr.map(p => ({
+            id: p._id,
+            name: p.name,
+            price: p.price,
+            stock: p.stock,
+            category: p.categoryId?.name || '',
+            images: p.images?.map(img => img.imageUrl) || [],
+            rating: 4.5,
+            description: p.description || '',
+          }))
+        )
       } catch (err) {
         console.error('Home page fetch failed:', err)
       } finally {
@@ -85,7 +105,6 @@ export function HomePage() {
   }
 
   const featuredProducts = products.slice(0, 4)
-  const bestSellers = products.slice(4, 8)
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -130,7 +149,7 @@ export function HomePage() {
       </section>
 
       {/* CATEGORIES */}
-      <section className="py-10 bg-gray-50">
+      <section className="py-6 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between mb-6">
             <h2 className="text-2xl font-bold">Shop by Category</h2>
@@ -160,7 +179,7 @@ export function HomePage() {
       </section>
 
       {/* FEATURED PRODUCTS */}
-      <section className="py-16 bg-white">
+      <section className="py-8 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-8">Featured Products</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -178,7 +197,7 @@ export function HomePage() {
       </section>
 
       {/* BEST SELLERS */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-8 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-8">Best Sellers</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
