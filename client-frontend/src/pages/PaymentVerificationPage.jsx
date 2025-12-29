@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useCart } from '../context/CartContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 
@@ -6,6 +7,7 @@ export default function PaymentVerificationPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = searchParams.get('session_id');
+  const { clearCart } = useCart();
 
   useEffect(() => {
     let cancelled = false;
@@ -24,6 +26,7 @@ export default function PaymentVerificationPage() {
         try {
           const res = await api.get(`/order/verify?session_id=${sessionId}`);
           if (res.data && res.data.orderId) {
+            clearCart();
             navigate(`/orders/${res.data.orderId}`);
             return;
           }
