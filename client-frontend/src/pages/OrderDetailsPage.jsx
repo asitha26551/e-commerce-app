@@ -60,7 +60,7 @@ export function OrderDetailsPage() {
         <section className="mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
             <div>
-              <h2 className="text-lg font-semibold text-white">Order #{order._id.slice(-6)}</h2>
+              <h2 className="text-lg font-semibold text-white">Order {order._id.slice(-6)}</h2>
               <p className="text-sm text-text-secondary">Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
             </div>
             <span
@@ -89,6 +89,9 @@ export function OrderDetailsPage() {
             <div>
               <span className="font-medium text-white">Shipping Fee:</span> ${order.shippingFee?.toFixed(2) ?? '0.00'}
             </div>
+            <div>
+              <span className="font-medium text-white">Payment Status:</span> {order.paymentStatus || 'pending'}
+            </div>
           </div>
         </section>
         {/* Shipping Address */}
@@ -110,7 +113,6 @@ export function OrderDetailsPage() {
           <div className="bg-surface rounded-lg border border-border p-4 divide-y divide-border">
             {order.items && order.items.length > 0 ? order.items.map((item, idx) => (
               <div key={item._id || idx} className="flex flex-col sm:flex-row sm:items-center py-4 gap-4">
-                <img src={item.product?.images?.[0] || '/placeholder.png'} alt={item.product?.name} className="w-16 h-16 rounded border border-border object-cover" />
                 <div className="flex-1">
                   <div className="font-medium text-white">{item.product?.name}</div>
                   {item.variant && <div className="text-xs text-text-secondary">Variant: {item.variant.name}</div>}
@@ -132,7 +134,7 @@ export function OrderDetailsPage() {
               <span className="font-medium text-white">Payment Method:</span> {order.paymentMethod}
             </div>
             <div>
-              <span className="font-medium text-white">Status:</span> {order.status}
+              <span className="font-medium text-white">Payment Status:</span> {order.paymentStatus || 'pending'}
             </div>
             <div>
               <span className="font-medium text-white">Total Paid:</span> ${order.total?.toFixed(2) ?? '0.00'}

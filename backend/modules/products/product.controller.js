@@ -1,3 +1,105 @@
+//function for updating a product by id
+const updateProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const {
+            name,
+            description,
+            price,
+            stock,
+            categoryId,
+            subcategoryId,
+            productTypeId,
+            brand,
+            condition,
+            bestseller
+        } = req.body;
+
+        // Validate required fields
+        if (!name || !price || !categoryId || !subcategoryId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields: name, price, categoryId, and subcategoryId are required'
+            });
+        }
+
+        // Find the product
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+
+        // Update product fields
+        product.name = name;
+        product.description = description;
+        product.price = Number(price);
+        product.stock = stock ? Number(stock) : 0;
+        product.categoryId = categoryId;
+        product.subcategoryId = subcategoryId;
+        product.productTypeId = productTypeId || undefined;
+        product.brand = brand;
+        product.condition = condition || 'new';
+        product.bestseller = (typeof bestseller === 'string') ? bestseller === 'true' : !!bestseller;
+
+        await product.save();
+
+        // Handle image uploads (replace images if new ones are uploaded)
+        const images = [];
+        const imageFields = ['image1', 'image2', 'image3', 'image4'];
+        let newImagesUploaded = false;
+        for (let i = 0; i < imageFields.length; i++) {
+            const fieldName = imageFields[i];
+            if (req.files && req.files[fieldName]) {
+                newImagesUploaded = true;
+                const file = req.files[fieldName][0];
+                // Upload to Cloudinary
+                const result = await cloudinary.uploader.upload(file.path, {
+                    resource_type: 'image',
+                    folder: 'products'
+                });
+                // Create ProductImage document
+                const productImage = new ProductImage({
+                    productId: product._id,
+                    imageUrl: result.secure_url,
+                    isMain: i === 0
+                });
+                await productImage.save();
+                images.push(productImage);
+            }
+        }
+        // If new images uploaded, remove old images
+        if (newImagesUploaded) {
+            const oldImages = await ProductImage.find({ productId: product._id });
+            for (const image of oldImages) {
+                // Extract public_id from Cloudinary URL and delete
+                const urlParts = image.imageUrl.split('/');
+                const publicIdWithExt = urlParts.slice(-2).join('/');
+                const publicId = publicIdWithExt.split('.')[0];
+                try {
+                    await cloudinary.uploader.destroy(publicId);
+                } catch (cloudinaryError) {
+                    console.error('Error deleting image from Cloudinary:', cloudinaryError);
+                }
+            }
+            await ProductImage.deleteMany({ productId: product._id });
+            // Save new images (already done above)
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Product updated successfully',
+            product,
+            images
+        });
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update product',
+            error: error.message
+        });
+    }
+}
 import Product from './Product.model.js';
 import ProductImage from './ProductImage.model.js';
 import ProductVariant from './ProductVariant.model.js';
@@ -285,4 +387,5 @@ export {
     removeProductById,
     getProductById,
     getBestSellers
+    ,updateProduct
 }

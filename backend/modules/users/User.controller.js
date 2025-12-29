@@ -103,4 +103,96 @@ const adminlogin = async (req, res) => {
     }
 }
 
-export {loginUser, registerUser, adminlogin};
+// Get current logged-in user profile
+const getCurrentUser = async (req, res) => {
+    try {
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ success: false, msg: 'Unauthorized' });
+        }
+
+        const user = await userModel.findById(userId).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
+
+        return res.json({ success: true, user });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Update current logged-in user profile (name, email, phone)
+const updateCurrentUser = async (req, res) => {
+    try {
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ success: false, msg: 'Unauthorized' });
+        }
+
+        const { name, email, phone } = req.body;
+
+        const update = {};
+        if (name !== undefined) update.name = name;
+        if (email !== undefined) update.email = email;
+        if (phone !== undefined) update.phone = phone;
+
+        const updatedUser = await userModel
+            .findByIdAndUpdate(userId, update, { new: true })
+            .select('-password');
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
+
+        return res.json({ success: true, user: updatedUser, msg: 'Profile updated' });
+    } catch (error) {
+        console.log(error);
+        // Handle duplicate email or validation errors gracefully
+        return res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+// Change password for current logged-in user
+const changePassword = async (req, res) => {
+    try {
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ success: false, msg: 'Unauthorized' });
+        }
+
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ success: false, msg: 'Please provide current and new password' });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({ success: false, msg: 'New password must be at least 8 characters' });
+        }
+
+        const user = await userModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, msg: 'Current password is incorrect' });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        return res.json({ success: true, msg: 'Password updated successfully' });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export {loginUser, registerUser, adminlogin, getCurrentUser, updateCurrentUser, changePassword};

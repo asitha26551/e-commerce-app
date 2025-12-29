@@ -13,17 +13,20 @@ export function Button({
   ...props
 }) {
   const baseStyles =
-    'inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none'
+    'inline-flex items-center justify-center rounded-md font-medium uppercase tracking-wide transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:pointer-events-none'
 
   const variants = {
-    primary: 'bg-primary text-white hover:bg-blue-900 focus:ring-primary',
-    accent: 'bg-accent text-white hover:bg-blue-600 focus:ring-accent',
-    cta: 'bg-cta text-white hover:bg-orange-600 focus:ring-cta',
+    primary:
+      'bg-primary text-white hover:bg-primary/80 shadow-neon-purple/40',
+    accent:
+      'bg-accent text-white hover:bg-accent/80 shadow-neon-purple/40',
+    cta: 'bg-cta text-white hover:bg-cta/80 shadow-neon-purple/40',
     secondary:
-      'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
+      'bg-surface text-text-secondary border border-border hover:bg-background',
     outline:
-      'border border-gray-300 bg-transparent hover:bg-gray-50 text-gray-700 focus:ring-gray-500',
-    ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 focus:ring-gray-500',
+      'border border-border bg-transparent hover:bg-background text-text-secondary',
+    ghost:
+      'bg-transparent hover:bg-surface/60 text-text-secondary',
   }
 
   const sizes = {

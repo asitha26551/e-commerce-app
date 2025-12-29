@@ -184,7 +184,32 @@ const userOrders = async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized' });
         }
         const orders = await Order.find({ userId }).sort({ createdAt: -1 });
-        res.status(200).json({ orders });
+
+        // Attach basic item details to each order for history view
+        const ordersWithItems = await Promise.all(
+            orders.map(async (order) => {
+                const items = await OrderItem.find({ orderId: order._id })
+                    .populate({ path: 'productId', select: 'name images' })
+                    .populate({ path: 'variantId', select: 'name' });
+
+                const formattedItems = items.map((item) => ({
+                    _id: item._id,
+                    product: item.productId
+                        ? {
+                              name: item.productId.name,
+                              images: item.productId.images,
+                          }
+                        : null,
+                    variant: item.variantId ? { name: item.variantId.name } : null,
+                    quantity: item.quantity,
+                    priceEach: item.priceEach,
+                }));
+
+                return { ...order.toObject(), items: formattedItems };
+            })
+        );
+
+        res.status(200).json({ orders: ordersWithItems });
     } catch (error) {
         console.error('ERROR in userOrders:', error);
         res.status(500).json({ message: 'Failed to fetch user orders', error: error.message, stack: error.stack });

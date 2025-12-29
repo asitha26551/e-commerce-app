@@ -27,7 +27,7 @@ export function Modal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"
             aria-hidden="true"
           />
 
@@ -41,16 +41,16 @@ export function Modal({
               duration: 0.3,
               bounce: 0,
             }}
-            className={`relative w-full ${maxWidthClasses[maxWidth]} transform rounded-xl bg-white shadow-2xl ring-1 ring-black/5 transition-all`}
+            className={`relative w-full ${maxWidthClasses[maxWidth]} transform rounded-xl bg-surface text-text shadow-neon-purple ring-1 ring-border transition-all`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
           >
-            <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+            <div className="flex items-center justify-between border-b border-border px-6 py-4">
               {title && (
                 <h3
                   id="modal-title"
-                  className="text-lg font-semibold leading-6 text-gray-900"
+                  className="text-lg font-display font-semibold leading-6 text-white"
                 >
                   {title}
                 </h3>
@@ -58,7 +58,7 @@ export function Modal({
 
               <button
                 type="button"
-                className="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                className="rounded-md bg-transparent text-text-secondary hover:text-text focus:outline-none focus:ring-2 focus:ring-primary"
                 onClick={onClose}
               >
                 <span className="sr-only">Close</span>

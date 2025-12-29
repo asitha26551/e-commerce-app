@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
-import { Modal } from '../ui/Modal'
 import { Plus } from 'lucide-react'
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import axios from 'axios';
@@ -138,169 +137,163 @@ export function AddProductModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Add New Product">
-      <form className="space-y-5" onSubmit={handleSubmit}>
-        <Input label="Product Name" placeholder="e.g. Wireless Headphones" value={name} onChange={e => setName(e.target.value)} />
+    <form className="space-y-5" onSubmit={handleSubmit}>
+      <Input label="Product Name" placeholder="e.g. Wireless Headphones" value={name} onChange={e => setName(e.target.value)} />
 
-        <div className="grid grid-cols-2 gap-5">
-          <Input label="Price" type="number" placeholder="0.00" value={price} onChange={e => setPrice(e.target.value)} />
-          <Input label="Stock" type="number" placeholder="0" value={stock} onChange={e => setStock(e.target.value)} />
-        </div>
+      <div className="grid grid-cols-2 gap-5">
+        <Input label="Price" type="number" placeholder="0.00" value={price} onChange={e => setPrice(e.target.value)} />
+        <Input label="Stock" type="number" placeholder="0" value={stock} onChange={e => setStock(e.target.value)} />
+      </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Category
-          </label>
-          <select
-            value={categoryId}
-            onChange={e => setCategoryId(e.target.value)}
-            className="block w-full rounded-md border border-gray-300 p-2 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-          >
-            <option value="">Select category</option>
-            {allCategories.length > 0 ? (
-              allCategories.map((c) => (
-                <option key={c._id} value={c._id}>{c.name}</option>
-              ))
-            ) : (
-              <option disabled>No categories</option>
-            )}
-          </select>
-        </div>
+      <div>
+        <label className="block text-xs font-semibold text-text-secondary tracking-wide mb-1">
+          Category
+        </label>
+        <select
+          value={categoryId}
+          onChange={e => setCategoryId(e.target.value)}
+          className="block w-full rounded-md border border-border bg-background text-text text-sm px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+        >
+          <option value="">Select category</option>
+          {allCategories.length > 0 ? (
+            allCategories.map((c) => (
+              <option key={c._id} value={c._id}>{c.name}</option>
+            ))
+          ) : (
+            <option disabled>No categories</option>
+          )}
+        </select>
+      </div>
 
-        {/* Subcategory Dropdown */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Subcategory
-          </label>
-          <select
-            value={subcategoryId}
-            onChange={e => setSubcategoryId(e.target.value)}
-            className="block w-full rounded-md border border-gray-300 p-2 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            disabled={!categoryId || subcategories.length === 0}
-          >
-            <option value="">Select subcategory</option>
-            {subcategories.length > 0 ? (
-              subcategories.map((sub) => (
-                <option key={sub._id} value={sub._id}>{sub.name}</option>
-              ))
-            ) : (
-              <option disabled>No subcategories</option>
-            )}
-          </select>
-        </div>
+      <div>
+        <label className="block text-xs font-semibold text-text-secondary tracking-wide mb-1">
+          Subcategory
+        </label>
+        <select
+          value={subcategoryId}
+          onChange={e => setSubcategoryId(e.target.value)}
+          className="block w-full rounded-md border border-border bg-background text-text text-sm px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
+          disabled={!categoryId || subcategories.length === 0}
+        >
+          <option value="">Select subcategory</option>
+          {subcategories.length > 0 ? (
+            subcategories.map((sub) => (
+              <option key={sub._id} value={sub._id}>{sub.name}</option>
+            ))
+          ) : (
+            <option disabled>No subcategories</option>
+          )}
+        </select>
+      </div>
 
-        {/* Product Type Dropdown */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Product Type
-          </label>
-          <select
-            value={productTypeId}
-            onChange={e => setProductTypeId(e.target.value)}
-            className="block w-full rounded-md border border-gray-300 p-2 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-            disabled={!subcategoryId || productTypes.length === 0}
-          >
-            <option value="">Select product type</option>
-            {productTypes.length > 0 ? (
-              productTypes.map((pt) => (
-                <option key={pt._id} value={pt._id}>{pt.name}</option>
-              ))
-            ) : (
-              <option disabled>No product types</option>
-            )}
-          </select>
-        </div>
+      <div>
+        <label className="block text-xs font-semibold text-text-secondary tracking-wide mb-1">
+          Product Type
+        </label>
+        <select
+          value={productTypeId}
+          onChange={e => setProductTypeId(e.target.value)}
+          className="block w-full rounded-md border border-border bg-background text-text text-sm px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary disabled:opacity-50"
+          disabled={!subcategoryId || productTypes.length === 0}
+        >
+          <option value="">Select product type</option>
+          {productTypes.length > 0 ? (
+            productTypes.map((pt) => (
+              <option key={pt._id} value={pt._id}>{pt.name}</option>
+            ))
+          ) : (
+            <option disabled>No product types</option>
+          )}
+        </select>
+      </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Description
-          </label>
-          <textarea
-            rows={3}
-            placeholder="Enter product description..."
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            className="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-          />
-        </div>
+      <div>
+        <label className="block text-xs font-semibold text-text-secondary tracking-wide mb-1">
+          Description
+        </label>
+        <textarea
+          rows={3}
+          placeholder="Enter product description..."
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          className="block w-full rounded-md border border-border bg-background text-text text-sm px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+        />
+      </div>
 
-        {/* Bestseller Checkbox */}
-        <div className="flex items-center mb-2">
-          <input
-            type="checkbox"
-            id="bestseller"
-            checked={bestseller}
-            onChange={e => setBestseller(e.target.checked)}
-            className="mr-2"
-          />
-          <label htmlFor="bestseller" className="text-sm font-medium text-gray-700">Bestseller</label>
-        </div>
+      <div className="flex items-center mb-2">
+        <input
+          type="checkbox"
+          id="bestseller"
+          checked={bestseller}
+          onChange={e => setBestseller(e.target.checked)}
+          className="mr-2 h-4 w-4 rounded border-border bg-background text-primary focus:ring-primary"
+        />
+        <label htmlFor="bestseller" className="text-sm font-medium text-text-secondary">Bestseller</label>
+      </div>
 
-        {/* Image Upload */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Product Images (up to 4)
-          </label>
-          <div className="flex flex-wrap gap-4 mt-3">
-            {[0, 1, 2, 3].map((idx) => {
-              const img = productImages[idx];
-              return (
-                <div key={idx} className="relative w-20 h-20">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    id={`product-image-input-${idx}`}
-                    onChange={e => {
-                      const file = e.target.files && e.target.files[0];
-                      if (file) {
-                        const newImages = [...productImages];
-                        newImages[idx] = Object.assign(file, { preview: URL.createObjectURL(file) });
-                        setProductImages(newImages);
-                      }
-                    }}
-                  />
-                  {img ? (
-                    <>
-                      <img
-                        src={img.preview}
-                        alt="Preview"
-                        className="w-20 h-20 object-cover rounded border cursor-pointer"
-                        onClick={() => document.getElementById(`product-image-input-${idx}`).click()}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(idx)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
-                      >
-                        ×
-                      </button>
-                    </>
-                  ) : (
-                    <div
-                      className="w-20 h-20 flex items-center justify-center border border-dashed border-gray-300 rounded bg-gray-50 text-gray-300 cursor-pointer"
+      <div>
+        <label className="block text-xs font-semibold text-text-secondary tracking-wide mb-1">
+          Product Images (up to 4)
+        </label>
+        <div className="flex flex-wrap gap-4 mt-3">
+          {[0, 1, 2, 3].map((idx) => {
+            const img = productImages[idx];
+            return (
+              <div key={idx} className="relative w-20 h-20">
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  id={`product-image-input-${idx}`}
+                  onChange={e => {
+                    const file = e.target.files && e.target.files[0];
+                    if (file) {
+                      const newImages = [...productImages];
+                      newImages[idx] = Object.assign(file, { preview: URL.createObjectURL(file) });
+                      setProductImages(newImages);
+                    }
+                  }}
+                />
+                {img ? (
+                  <>
+                    <img
+                      src={img.preview}
+                      alt="Preview"
+                      className="w-20 h-20 object-cover rounded border border-border cursor-pointer"
                       onClick={() => document.getElementById(`product-image-input-${idx}`).click()}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(idx)}
+                      className="absolute -top-2 -right-2 bg-error text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
                     >
-                      <Plus className="h-5 w-5" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                      ×
+                    </button>
+                  </>
+                ) : (
+                  <div
+                    className="w-20 h-20 flex items-center justify-center border border-dashed border-border rounded bg-background text-text-secondary cursor-pointer hover:border-primary hover:text-primary transition-colors"
+                    onClick={() => document.getElementById(`product-image-input-${idx}`).click()}
+                  >
+                    <Plus className="h-5 w-5" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-        {error && <div className="text-red-500 text-sm">{error}</div>}
+      {error && <div className="text-error text-sm">{error}</div>}
 
-        <div className="pt-4 flex justify-end space-x-3 border-t border-gray-100">
-          <Button variant="outline" type="button" onClick={onClose} disabled={loading}>
-            Cancel
-          </Button>
-          <Button variant="primary" type="submit" disabled={loading}>
-            {loading ? 'Saving...' : 'Save Product'}
-          </Button>
-        </div>
-      </form>
-    </Modal>
+      <div className="pt-4 flex justify-end gap-3 border-t border-border mt-4">
+        <Button variant="outline" type="button" onClick={onClose} disabled={loading}>
+          Cancel
+        </Button>
+        <Button variant="primary" type="submit" disabled={loading}>
+          {loading ? 'Saving...' : 'Save Product'}
+        </Button>
+      </div>
+    </form>
   );
 }
