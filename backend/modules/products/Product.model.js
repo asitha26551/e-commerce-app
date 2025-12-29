@@ -11,6 +11,7 @@ const productSchema = new mongoose.Schema({
   brand: String,
   condition: { type: String, enum: ['new','used'], default: 'new' },
   sellerId: { type: Number, default: 1 },
+  bestseller: { type: Boolean, default: false },
 }, { timestamps: true });
 
 export default mongoose.model('Product', productSchema);

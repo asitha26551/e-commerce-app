@@ -16,7 +16,8 @@ const addProduct = async (req, res) => {
             productTypeId,
             brand,
             condition,
-            variants // optional: JSON string of variants [{size, color, stock}]
+            variants, // optional: JSON string of variants [{size, color, stock}]
+            bestseller // optional: boolean
         } = req.body;
 
         // Validate required fields
@@ -37,7 +38,8 @@ const addProduct = async (req, res) => {
             subcategoryId,
             productTypeId: productTypeId || undefined,
             brand,
-            condition: condition || 'new'
+            condition: condition || 'new',
+            bestseller: (typeof bestseller === 'string') ? bestseller === 'true' : !!bestseller
         });
 
         await product.save();
@@ -240,9 +242,47 @@ const getProductById = async (req, res) => {
     }
 }
 
+
+// Get best seller products
+const getBestSellers = async (req, res) => {
+    try {
+        const products = await Product.find({ bestseller: true })
+            .populate('categoryId', 'name')
+            .populate('subcategoryId', 'name')
+            .populate('productTypeId', 'name')
+            .sort({ createdAt: -1 });
+
+        const productsWithImages = await Promise.all(
+            products.map(async (product) => {
+                const images = await ProductImage.find({ productId: product._id });
+                const variants = await ProductVariant.find({ productId: product._id });
+                return {
+                    ...product.toObject(),
+                    images,
+                    variants
+                };
+            })
+        );
+
+        res.status(200).json({
+            success: true,
+            count: productsWithImages.length,
+            products: productsWithImages
+        });
+    } catch (error) {
+        console.error('Error getting best sellers:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to retrieve best sellers',
+            error: error.message
+        });
+    }
+}
+
 export {
     addProduct,
     getAllProducts,
     removeProductById,
-    getProductById
+    getProductById,
+    getBestSellers
 }

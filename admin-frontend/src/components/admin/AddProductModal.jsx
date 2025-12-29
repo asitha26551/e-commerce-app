@@ -26,6 +26,7 @@ export function AddProductModal({
   const [allCategories, setAllCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [productTypes, setProductTypes] = useState([]);
+  const [bestseller, setBestseller] = useState(false);
 
   // Fetch categories with subcategories and product types
   useEffect(() => {
@@ -109,6 +110,7 @@ export function AddProductModal({
       formData.append('subcategoryId', subcategoryId);
       formData.append('productTypeId', productTypeId);
       formData.append('description', description);
+      formData.append('bestseller', bestseller ? 'true' : 'false');
       productImages.forEach((img, idx) => {
         formData.append(`image${idx + 1}`, img);
       });
@@ -125,6 +127,7 @@ export function AddProductModal({
       setProductTypeId('');
       setDescription('');
       setProductImages([]);
+      setBestseller(false);
       onProductAdded && onProductAdded();
       onClose();
     } catch (err) {
@@ -219,6 +222,18 @@ export function AddProductModal({
             onChange={e => setDescription(e.target.value)}
             className="block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
           />
+        </div>
+
+        {/* Bestseller Checkbox */}
+        <div className="flex items-center mb-2">
+          <input
+            type="checkbox"
+            id="bestseller"
+            checked={bestseller}
+            onChange={e => setBestseller(e.target.checked)}
+            className="mr-2"
+          />
+          <label htmlFor="bestseller" className="text-sm font-medium text-gray-700">Bestseller</label>
         </div>
 
         {/* Image Upload */}
