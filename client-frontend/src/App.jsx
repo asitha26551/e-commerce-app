@@ -17,6 +17,8 @@ import { ContactPage } from './pages/ContactPage'
 import { OrderHistoryPage } from './pages/OrderHistoryPage'
 import { OrderDetailsPage } from './pages/OrderDetailsPage'
 
+import PaymentVerificationPage from './pages/PaymentVerificationPage';
+
 export function App() {
 
   //const [token, setToken] = useState('');
@@ -43,7 +45,7 @@ export function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/orders" element={<OrderHistoryPage />} />
           <Route path="/orders/:id" element={<OrderDetailsPage />} />
-
+          <Route path="/verify" element={<PaymentVerificationPage />} />
         </Routes>
       </Router>
     </CartProvider>

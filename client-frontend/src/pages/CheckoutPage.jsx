@@ -61,6 +61,29 @@ export function CheckoutPage() {
         setTimeout(() => {
           navigate('/orders');
         }, 1200);
+      } else if (paymentMethod === 'stripe') {
+        // Prepare items for backend
+        const orderItems = items.map(item => ({
+          productId: item.id,
+          productName: item.name,
+          quantity: item.quantity,
+          priceEach: item.price,
+        }));
+        const token = localStorage.getItem('token');
+        const res = await api.post('/order/stripe', {
+          items: orderItems,
+          subtotal: cartTotal,
+          shippingFee: shipping,
+          total,
+          address: address,
+        }, {
+          headers: { token }
+        });
+        if (res.data.url) {
+          window.location.href = res.data.url;
+        } else {
+          setOrderMsg('Stripe payment initiation failed.');
+        }
       } else {
         setOrderMsg('Selected payment method not implemented in demo.');
       }
