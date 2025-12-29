@@ -73,6 +73,7 @@ export function OrdersTab() {
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Phone</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Address</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Payment</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Payment Status</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Total</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Status</th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Actions</th>
@@ -101,6 +102,16 @@ export function OrdersTab() {
                   ) : '-'}
                 </td>
                 <td className="px-4 py-3 text-sm">{order.paymentMethod}</td>
+                <td className="px-4 py-3 text-sm">
+                  <span className={`px-2 py-1 rounded text-xs font-semibold capitalize ${
+                    order.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
+                    order.paymentStatus === 'failed' ? 'bg-red-100 text-red-700' :
+                    order.paymentStatus === 'refunded' ? 'bg-blue-100 text-blue-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {order.paymentStatus || 'pending'}
+                  </span>
+                </td>
                 <td className="px-4 py-3 font-bold text-sm">${order.total?.toFixed(2) ?? '0.00'}</td>
                 <td className="px-4 py-3 text-sm">
                   <span className={`px-2 py-1 rounded text-xs font-semibold capitalize ${
@@ -168,6 +179,7 @@ export function OrdersTab() {
           <h3 className="text-base font-semibold mt-4 mb-1">Payment Information</h3>
           <div className="mb-2">
             <div><span className="font-semibold">Payment Method:</span> {selectedOrder.paymentMethod}</div>
+            <div><span className="font-semibold">Payment Status:</span> {selectedOrder.paymentStatus || 'pending'}</div>
           </div>
           {/* 3️⃣ Shipping Address */}
           <h3 className="text-base font-semibold mt-4 mb-1">Shipping Address</h3>

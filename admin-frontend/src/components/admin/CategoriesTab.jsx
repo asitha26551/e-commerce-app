@@ -75,24 +75,24 @@ export function CategoriesTab() {
 
   return (
     <div className="p-6 space-y-6">
-      {loading && <div>Loading...</div>}
-      {error && <div className="text-red-500">{error}</div>}
+      {loading && <div className="text-text-secondary">Loading...</div>}
+      {error && <div className="text-error">{error}</div>}
       {!loading && !error && categories.map(category => (
         <div
           key={category._id}
-          className="bg-card border rounded-xl p-6 space-y-4"
+          className="bg-surface border border-border rounded-xl p-6 space-y-4 shadow-neon-purple/10"
         >
           {/* Category Header */}
           <div className="flex items-center gap-4">
             {/* No image in backend, placeholder */}
-            <div className="h-16 w-16 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400">
+            <div className="h-16 w-16 rounded-lg bg-background flex items-center justify-center text-text-secondary border border-border">
               <Edit className="h-8 w-8" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-bold text-text">
+              <h3 className="text-lg font-display font-bold text-text">
                 {category.name}
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-text-secondary">
                 {category.subcategories.length} subcategories
               </p>
             </div>
@@ -103,12 +103,12 @@ export function CategoriesTab() {
           </div>
 
           {/* Subcategories */}
-          <div className="pl-4 space-y-3 border-l">
+          <div className="pl-4 space-y-3 border-l border-border/60">
             {category.subcategories.map(sub => (
               <div key={sub._id} className="space-y-2">
                 {/* Subcategory Header */}
                 <div className="flex items-center justify-between">
-                  <h4 className="font-semibold text-gray-800">
+                  <h4 className="font-semibold text-text">
                     {sub.name}
                   </h4>
 
@@ -130,7 +130,7 @@ export function CategoriesTab() {
                   {sub.productTypes.map(type => (
                     <span
                       key={type._id}
-                      className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700"
+                      className="px-3 py-1 text-xs rounded-full bg-background text-text-secondary border border-border"
                     >
                       {type.name}
                     </span>
@@ -156,7 +156,7 @@ export function CategoriesTab() {
 
       {/* Add Category */}
       <button
-        className="border-2 border-dashed rounded-xl p-6 flex flex-col items-center justify-center text-gray-500 hover:border-gray-400 hover:text-gray-700 transition"
+        className="border-2 border-dashed border-border rounded-xl p-6 flex flex-col items-center justify-center text-text-secondary hover:border-primary hover:text-text transition"
         onClick={() => setShowAddModal(true)}
       >
         <Plus className="h-6 w-6 mb-2" />

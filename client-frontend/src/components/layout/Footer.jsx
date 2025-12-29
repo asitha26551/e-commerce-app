@@ -13,27 +13,42 @@ import {
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-12 pb-8">
+    <footer className="bg-surface text-text-secondary pt-16 pb-8 border-t border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">MarketPlace</h3>
-            <p className="text-sm mb-4">
-              Your one-stop destination for everything you need. Quality
-              products, best prices, and fast delivery.
+            <h3 className="text-white text-xl font-display font-bold mb-6 gradient-text">
+              GAMEZONE
+            </h3>
+            <p className="text-sm mb-6 leading-relaxed">
+              Level up your setup with premium gaming gear. High-performance
+              peripherals, components, and accessories for the ultimate gaming
+              experience.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-white transition-colors">
+              <a
+                href="#"
+                className="bg-background p-2 rounded-full hover:text-primary hover:shadow-neon-purple transition-all"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-white transition-colors">
+              <a
+                href="#"
+                className="bg-background p-2 rounded-full hover:text-accent hover:shadow-neon-cyan transition-all"
+              >
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-white transition-colors">
+              <a
+                href="#"
+                className="bg-background p-2 rounded-full hover:text-error hover:shadow-neon-purple transition-all"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="hover:text-white transition-colors">
+              <a
+                href="#"
+                className="bg-background p-2 rounded-full hover:text-error hover:shadow-neon-purple transition-all"
+              >
                 <Youtube className="h-5 w-5" />
               </a>
             </div>
@@ -41,17 +56,22 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="text-white text-lg font-display font-bold mb-6">
+              Quick Links
+            </h3>
+            <ul className="space-y-3 text-sm">
               <li>
-                <Link to="/" className="hover:text-white transition-colors">
+                <Link
+                  to="/"
+                  className="hover:text-primary hover:pl-2 transition-all"
+                >
                   Home
                 </Link>
               </li>
               <li>
                 <Link
                   to="/products"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-primary hover:pl-2 transition-all"
                 >
                   Shop All
                 </Link>
@@ -59,7 +79,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/about"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-primary hover:pl-2 transition-all"
                 >
                   About Us
                 </Link>
@@ -67,17 +87,17 @@ export function Footer() {
               <li>
                 <Link
                   to="/contact"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-primary hover:pl-2 transition-all"
                 >
                   Contact
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/orders"
-                  className="hover:text-white transition-colors"
+                  to="/blog"
+                  className="hover:text-primary hover:pl-2 transition-all"
                 >
-                  Track Order
+                  Blog
                 </Link>
               </li>
             </ul>
@@ -85,14 +105,14 @@ export function Footer() {
 
           {/* Customer Service */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">
-              Customer Service
+            <h3 className="text-white text-lg font-display font-bold mb-6">
+              Support
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm">
               <li>
                 <Link
                   to="/profile"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-accent hover:pl-2 transition-all"
                 >
                   My Account
                 </Link>
@@ -100,7 +120,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/orders"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-accent hover:pl-2 transition-all"
                 >
                   Order History
                 </Link>
@@ -108,7 +128,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/wishlist"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-accent hover:pl-2 transition-all"
                 >
                   Wishlist
                 </Link>
@@ -116,7 +136,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/shipping"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-accent hover:pl-2 transition-all"
                 >
                   Shipping Policy
                 </Link>
@@ -124,7 +144,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/returns"
-                  className="hover:text-white transition-colors"
+                  className="hover:text-accent hover:pl-2 transition-all"
                 >
                   Returns & Exchanges
                 </Link>
@@ -134,27 +154,30 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-white text-lg font-bold mb-4">Contact Us</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start">
-                <MapPin className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span>123 Market Street, Commerce City, CA 90210</span>
+            <h3 className="text-white text-lg font-display font-bold mb-6">
+              Contact Us
+            </h3>
+            <ul className="space-y-4 text-sm">
+              <li className="flex items-start group">
+                <MapPin className="h-5 w-5 mr-3 flex-shrink-0 text-primary group-hover:text-accent transition-colors" />
+                <span>123 Gaming Street, Tech District, CA 90210</span>
               </li>
-              <li className="flex items-center">
-                <Phone className="h-5 w-5 mr-2 flex-shrink-0" />
+              <li className="flex items-center group">
+                <Phone className="h-5 w-5 mr-3 flex-shrink-0 text-primary group-hover:text-accent transition-colors" />
                 <span>+1 (555) 123-4567</span>
               </li>
-              <li className="flex items-center">
-                <Mail className="h-5 w-5 mr-2 flex-shrink-0" />
-                <span>support@marketplace.com</span>
+              <li className="flex items-center group">
+                <Mail className="h-5 w-5 mr-3 flex-shrink-0 text-primary group-hover:text-accent transition-colors" />
+                <span>support@gamezone.com</span>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 mt-8 text-center text-sm">
+        <div className="border-t border-border pt-8 text-center text-sm text-gray-500">
           <p>
-            &copy; {new Date().getFullYear()} MarketPlace. All rights reserved.
+            &copy; {new Date().getFullYear()} GameZone. All rights reserved. GG
+            WP.
           </p>
         </div>
       </div>

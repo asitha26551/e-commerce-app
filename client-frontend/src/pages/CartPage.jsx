@@ -12,18 +12,23 @@ export function CartPage() {
   const { items } = useCart()
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background text-text">
       <Navbar />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
+        <div className="flex items-center mb-8">
+          <ShoppingBag className="h-8 w-8 text-primary mr-3" />
+          <h1 className="text-3xl font-display font-bold text-white">
+            YOUR <span className="text-primary">LOADOUT</span>
+          </h1>
+        </div>
 
         {items.length > 0 ? (
           <div className="lg:grid lg:grid-cols-12 lg:gap-12 items-start">
             {/* Cart Items List */}
             <div className="lg:col-span-8">
-              <div className="bg-white shadow-sm rounded-lg border border-gray-100 overflow-hidden mb-8 lg:mb-0">
-                <div className="p-6 space-y-0">
+              <div className="bg-surface rounded-lg border border-border shadow-neon-purple/20 overflow-hidden mb-8 lg:mb-0">
+                <div className="p-6 divide-y divide-border">
                   {items.map(item => (
                     <CartItem
                       key={`${item.id}-${item.selectedSize}-${item.selectedColor}`}
@@ -40,16 +45,16 @@ export function CartPage() {
             </div>
           </div>
         ) : (
-          <div className="text-center py-24 bg-white rounded-lg shadow-sm border border-gray-100">
+          <div className="text-center py-24 bg-surface rounded-lg shadow-neon-purple/20 border border-border">
             <div className="flex justify-center mb-6">
-              <div className="bg-gray-100 p-6 rounded-full">
-                <ShoppingBag className="h-12 w-12 text-gray-400" />
+              <div className="bg-background p-6 rounded-full border border-border">
+                <ShoppingBag className="h-12 w-12 text-primary" />
               </div>
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            <h2 className="text-2xl font-display font-bold text-white mb-2">
               Your cart is empty
             </h2>
-            <p className="text-gray-500 mb-8 max-w-md mx-auto">
+            <p className="text-gray-400 mb-8 max-w-md mx-auto">
               Looks like you haven't added anything to your cart yet. Explore
               our products and find something you love!
             </p>

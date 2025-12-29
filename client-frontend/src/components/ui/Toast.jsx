@@ -14,8 +14,9 @@ export function Toast({ id, type, message, onClose }) {
   return (
     <div
       className={`
-        flex items-center p-4 rounded-lg shadow-lg mb-4 transform transition-all duration-300 translate-x-0
-        ${type === 'success' ? 'bg-success text-white' : 'bg-error text-white'}
+        flex items-center p-4 rounded-lg shadow-neon-purple/40 mb-4 transform transition-all duration-300 translate-x-0
+        bg-background/90 border
+        ${type === 'success' ? 'text-success border-success/60' : 'text-error border-error/60'}
       `}
     >
       {type === 'success' ? (

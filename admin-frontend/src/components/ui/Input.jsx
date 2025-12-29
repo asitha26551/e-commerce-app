@@ -9,7 +9,7 @@ export const Input = forwardRef(
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="block text-xs font-semibold text-text-secondary mb-1 tracking-wide"
           >
             {label}
           </label>
@@ -20,12 +20,12 @@ export const Input = forwardRef(
             ref={ref}
             id={inputId}
             className={`
-              block w-full rounded-md border-gray-300 shadow-sm
-              focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border
-              disabled:bg-gray-50 disabled:text-gray-500
+              block w-full rounded-md border border-border bg-background text-text shadow-sm
+              focus:border-primary focus:ring-primary sm:text-sm p-2
+              disabled:bg-surface/60 disabled:text-text-secondary
               ${
                 error
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+                  ? 'border-error focus:border-error focus:ring-error'
                   : ''
               }
               ${className}
@@ -34,10 +34,10 @@ export const Input = forwardRef(
           />
         </div>
 
-        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+        {error && <p className="mt-1 text-xs text-error">{error}</p>}
 
         {helperText && !error && (
-          <p className="mt-1 text-sm text-gray-500">{helperText}</p>
+          <p className="mt-1 text-xs text-text-secondary">{helperText}</p>
         )}
       </div>
     )

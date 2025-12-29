@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
 import { useCart } from '../context/CartContext'
+import { ShieldCheck, Wallet, Truck } from 'lucide-react'
 import api from '../services/api'
 
 export function CheckoutPage() {
@@ -26,6 +27,27 @@ export function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [loading, setLoading] = useState(false);
   const [orderMsg, setOrderMsg] = useState('');
+
+  const paymentMethods = [
+    {
+      id: 'cod',
+      name: 'Cash on Delivery',
+      description: 'Pay when you receive your order',
+      icon: '💵',
+    },
+    {
+      id: 'stripe',
+      name: 'Stripe',
+      description: 'Pay securely with credit/debit card',
+      icon: '💳',
+    },
+    {
+      id: 'razorpay',
+      name: 'Razorpay',
+      description: 'UPI, Cards, NetBanking & More',
+      icon: '🔐',
+    },
+  ]
 
   const handleAddressChange = (e) => {
     setAddress({ ...address, [e.target.name]: e.target.value });
@@ -94,103 +116,265 @@ export function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background text-text">
       <Navbar />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
+        <div className="flex items-center mb-8">
+          <ShieldCheck className="h-8 w-8 text-success mr-3" />
+          <h1 className="text-3xl font-display font-bold text-white">
+            SECURE <span className="text-success">CHECKOUT</span>
+          </h1>
+        </div>
 
         <div className="lg:grid lg:grid-cols-12 lg:gap-12">
           {/* Left Column: Forms */}
           <div className="lg:col-span-8 space-y-8">
             {/* Shipping Address */}
-            <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Shipping Address</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input label="Full Name" name="fullName" value={address.fullName} onChange={handleAddressChange} placeholder="John Doe" />
-                <Input label="Phone" name="phone" value={address.phone} onChange={handleAddressChange} placeholder="1234567890" />
-                <Input label="Address Line 1" name="line1" value={address.line1} onChange={handleAddressChange} className="md:col-span-2" placeholder="123 Main St" />
-                <Input label="Address Line 2" name="line2" value={address.line2} onChange={handleAddressChange} className="md:col-span-2" placeholder="Apt, Suite, etc." />
-                <Input label="City" name="city" value={address.city} onChange={handleAddressChange} />
-                <Input label="Postal Code" name="postalCode" value={address.postalCode} onChange={handleAddressChange} />
-                <Input label="Country" name="country" value={address.country} onChange={handleAddressChange} />
+            <section className="bg-surface p-8 rounded-lg shadow-lg border border-border">
+              <div className="flex items-center mb-6 border-b border-border pb-4">
+                <Truck className="h-6 w-6 text-primary mr-3" />
+                <h2 className="text-xl font-display font-bold text-white">
+                  SHIPPING ADDRESS
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Input
+                  label="FULL NAME"
+                  name="fullName"
+                  value={address.fullName}
+                  onChange={handleAddressChange}
+                  placeholder="John Doe"
+                />
+                <Input
+                  label="PHONE"
+                  name="phone"
+                  value={address.phone}
+                  onChange={handleAddressChange}
+                  placeholder="1234567890"
+                />
+                <Input
+                  label="ADDRESS LINE 1"
+                  name="line1"
+                  value={address.line1}
+                  onChange={handleAddressChange}
+                  className="md:col-span-2"
+                  placeholder="123 Main St"
+                />
+                <Input
+                  label="ADDRESS LINE 2"
+                  name="line2"
+                  value={address.line2}
+                  onChange={handleAddressChange}
+                  className="md:col-span-2"
+                  placeholder="Apt, Suite, etc."
+                />
+                <Input
+                  label="CITY"
+                  name="city"
+                  value={address.city}
+                  onChange={handleAddressChange}
+                />
+                <Input
+                  label="POSTAL CODE"
+                  name="postalCode"
+                  value={address.postalCode}
+                  onChange={handleAddressChange}
+                />
+                <Input
+                  label="COUNTRY"
+                  name="country"
+                  value={address.country}
+                  onChange={handleAddressChange}
+                />
               </div>
             </section>
 
             {/* Payment Method */}
-            <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Payment Method</h2>
-              <div className="space-y-4">
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input type="radio" name="paymentMethod" value="cod" checked={paymentMethod === 'cod'} onChange={handlePaymentChange} className="h-4 w-4 text-primary focus:ring-primary" />
-                  <span className="ml-3 block text-sm font-medium text-gray-900">Cash on Delivery</span>
-                </label>
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input type="radio" name="paymentMethod" value="stripe" checked={paymentMethod === 'stripe'} onChange={handlePaymentChange} className="h-4 w-4 text-primary focus:ring-primary" />
-                  <span className="ml-3 block text-sm font-medium text-gray-900">Stripe</span>
-                </label>
-                <label className="flex items-center p-4 border rounded-lg cursor-pointer hover:border-primary transition-colors">
-                  <input type="radio" name="paymentMethod" value="razorpay" checked={paymentMethod === 'razorpay'} onChange={handlePaymentChange} className="h-4 w-4 text-primary focus:ring-primary" />
-                  <span className="ml-3 block text-sm font-medium text-gray-900">RazorPay</span>
-                </label>
+            <section className="bg-surface p-8 rounded-lg shadow-lg border border-border">
+              <div className="flex items-center mb-6 border-b border-border pb-4">
+                <Wallet className="h-6 w-6 text-primary mr-3" />
+                <h2 className="text-xl font-display font-bold text-white">
+                  PAYMENT METHOD
+                </h2>
               </div>
-            </section>
-
-            {/* Payment */}
-            <section className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-              <h2 className="text-xl font-bold text-gray-900 mb-6">Payment Details</h2>
               <div className="space-y-4">
-                <Input label="Card Number" placeholder="0000 0000 0000 0000" />
-                <div className="grid grid-cols-2 gap-4">
-                  <Input label="Expiration Date" placeholder="MM/YY" />
-                  <Input label="CVC" placeholder="123" />
-                </div>
-                <Input label="Cardholder Name" placeholder="John Doe" />
+                {paymentMethods.map((method) => (
+                  <label
+                    key={method.id}
+                    className={`
+                      flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all group
+                      ${paymentMethod === method.id ? 'border-primary bg-primary/10 shadow-neon-purple' : 'border-border hover:border-primary/50 hover:bg-background/50'}
+                    `}
+                  >
+                    <div className="flex items-center flex-1">
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value={method.id}
+                        checked={paymentMethod === method.id}
+                        onChange={handlePaymentChange}
+                        className="h-4 w-4 text-primary focus:ring-primary bg-background border-gray-600"
+                      />
+                      <div className="ml-4 flex items-center flex-1">
+                        <span className="text-2xl mr-3">{method.icon}</span>
+                        <div>
+                          <span
+                            className={`
+                            block text-sm font-bold font-display transition-colors
+                            ${paymentMethod === method.id ? 'text-primary' : 'text-white group-hover:text-primary'}
+                          `}
+                          >
+                            {method.name}
+                          </span>
+                          <span className="block text-sm text-gray-400">
+                            {method.description}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    {paymentMethod === method.id && (
+                      <div className="ml-4">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-success/20 text-success border border-success/50 uppercase tracking-wider">
+                          Selected
+                        </span>
+                      </div>
+                    )}
+                  </label>
+                ))}
+              </div>
+
+              {/* Payment Method Info */}
+              <div className="mt-6 p-4 bg-background/50 rounded-lg border border-border">
+                {paymentMethod === 'cod' && (
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 text-2xl mr-3">ℹ️</div>
+                    <div>
+                      <p className="text-sm text-gray-300 font-medium">
+                        Pay in cash when your order is delivered to your
+                        doorstep.
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Please keep exact change ready for a smooth delivery
+                        experience.
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {paymentMethod === 'stripe' && (
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 text-2xl mr-3">🔒</div>
+                    <div>
+                      <p className="text-sm text-gray-300 font-medium">
+                        You'll be redirected to Stripe's secure payment gateway
+                        to complete your purchase.
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Accepts all major credit/debit cards with 256-bit
+                        encryption.
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {paymentMethod === 'razorpay' && (
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 text-2xl mr-3">⚡</div>
+                    <div>
+                      <p className="text-sm text-gray-300 font-medium">
+                        Pay using UPI, Cards, NetBanking, Wallets, and more
+                        through Razorpay.
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Fast, secure, and supports multiple payment options.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </section>
           </div>
 
           {/* Right Column: Order Summary */}
           <div className="lg:col-span-4 mt-8 lg:mt-0">
-            <div className="bg-gray-50 p-6 rounded-lg sticky top-24">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Order Summary</h2>
-              <ul className="-my-4 divide-y divide-gray-200 mb-6">
-                {items.map((item) => (
-                  <li key={item.id} className="flex py-4">
-                    <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                      <img src={item.images[0]} alt={item.name} className="h-full w-full object-cover object-center" />
-                    </div>
-                    <div className="ml-4 flex flex-1 flex-col">
-                      <div className="flex justify-between text-base font-medium text-gray-900">
-                        <h3 className="line-clamp-1">{item.name}</h3>
-                        <p className="ml-4">${item.price.toFixed(2)}</p>
+            <div className="bg-surface p-6 rounded-lg lg:sticky lg:top-24 border border-border shadow-neon-purple/20">
+              <h2 className="text-lg font-display font-bold text-white mb-4 border-b border-border pb-4">
+                ORDER SUMMARY
+              </h2>
+              <div className="flow-root">
+                <ul className="-my-4 divide-y divide-border mb-6">
+                  {items.map((item) => (
+                    <li key={item.id} className="flex py-4">
+                      <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-border">
+                        <img
+                          src={item.images[0]}
+                          alt={item.name}
+                          className="h-full w-full object-cover object-center"
+                        />
                       </div>
-                      <p className="mt-1 text-sm text-gray-500">Qty {item.quantity}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+                      <div className="ml-4 flex flex-1 flex-col">
+                        <div>
+                          <div className="flex justify-between text-base font-medium text-white">
+                            <h3 className="line-clamp-1 font-display">
+                              {item.name}
+                            </h3>
+                            <p className="ml-4 font-mono text-success">
+                              ${item.price.toFixed(2)}
+                            </p>
+                          </div>
+                          <p className="mt-1 text-sm text-gray-400">
+                            Qty {item.quantity}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              <div className="border-t border-gray-200 pt-4 space-y-4">
-                <div className="flex justify-between text-sm text-gray-600">
+              <div className="border-t border-border pt-4 space-y-4">
+                <div className="flex justify-between text-sm text-gray-400">
                   <span>Subtotal</span>
-                  <span>${cartTotal.toFixed(2)}</span>
+                  <span className="text-white font-mono">
+                    ${cartTotal.toFixed(2)}
+                  </span>
                 </div>
-                <div className="flex justify-between text-sm text-gray-600">
+                <div className="flex justify-between text-sm text-gray-400">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}</span>
+                  <span
+                    className={`font-mono ${
+                      shipping === 0 ? 'text-success' : 'text-white'
+                    }`}
+                  >
+                    {shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}
+                  </span>
                 </div>
-                {/* Tax removed */}
-                <div className="flex justify-between text-base font-bold text-gray-900 pt-4 border-t border-gray-200">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                <div className="flex justify-between text-lg font-bold text-white pt-4 border-t border-border">
+                  <span className="font-display">TOTAL</span>
+                  <span className="text-success font-mono text-shadow-glow">
+                    ${total.toFixed(2)}
+                  </span>
                 </div>
               </div>
 
-              <Button variant="cta" fullWidth size="lg" className="mt-6" onClick={handlePlaceOrder} disabled={loading}>
-                {loading ? 'Placing Order...' : 'Place Order'}
+              <Button
+                variant="cta"
+                fullWidth
+                size="lg"
+                className="mt-6 text-lg"
+                onClick={handlePlaceOrder}
+                disabled={loading}
+              >
+                {loading
+                  ? 'Placing Order...'
+                  : paymentMethod === 'cod'
+                    ? 'PLACE ORDER'
+                    : `PAY WITH ${paymentMethods.find((m) => m.id === paymentMethod)?.name.toUpperCase()}`}
               </Button>
-              {orderMsg && <p className="mt-4 text-center text-sm text-green-600">{orderMsg}</p>}
+              {orderMsg && (
+                <p className="mt-4 text-center text-sm text-success">
+                  {orderMsg}
+                </p>
+              )}
               <p className="mt-4 text-center text-xs text-gray-500">
                 By placing this order, you agree to our Terms of Service and Privacy Policy.
               </p>

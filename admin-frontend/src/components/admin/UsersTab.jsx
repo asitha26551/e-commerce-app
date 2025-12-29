@@ -10,13 +10,13 @@ export function UsersTab({ users = [] }) {
       transition={{ duration: 0.3 }}
       className="overflow-x-auto"
     >
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50/50">
+      <table className="min-w-full divide-y divide-border">
+        <thead className="bg-surface">
           <tr>
             {['User', 'Email', 'Role', 'Status', 'Actions'].map((col) => (
               <th
                 key={col}
-                className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                className="px-6 py-4 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider"
               >
                 {col}
               </th>
@@ -24,24 +24,24 @@ export function UsersTab({ users = [] }) {
           </tr>
         </thead>
 
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-surface divide-y divide-border">
           {users.length > 0 ? (
             users.map((user) => (
               <tr
                 key={user.id}
-                className="hover:bg-gray-50/50 transition-colors"
+                className="hover:bg-background/60 transition-colors"
               >
                 {/* User */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
-                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                    <div className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-accent text-white flex items-center justify-center font-bold text-sm shadow-neon-purple">
                       {user.name?.charAt(0).toUpperCase()}
                     </div>
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-text">
                         {user.name}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-text-secondary">
                         ID: {user.id}
                       </div>
                     </div>
@@ -49,7 +49,7 @@ export function UsersTab({ users = [] }) {
                 </td>
 
                 {/* Email */}
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                   {user.email}
                 </td>
 
@@ -58,8 +58,8 @@ export function UsersTab({ users = [] }) {
                   <span
                     className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       user.role === 'Admin'
-                        ? 'bg-purple-50 text-purple-700 border border-purple-200'
-                        : 'bg-gray-100 text-gray-700 border border-gray-200'
+                        ? 'bg-primary/20 text-primary border border-primary/40'
+                        : 'bg-background text-text-secondary border border-border'
                     }`}
                   >
                     {user.role}
@@ -71,8 +71,8 @@ export function UsersTab({ users = [] }) {
                   <span
                     className={`px-2.5 py-0.5 inline-flex text-xs font-semibold rounded-full ${
                       user.status === 'Active'
-                        ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'bg-gray-100 text-gray-600 border border-gray-200'
+                        ? 'bg-success/20 text-success border border-success/50'
+                        : 'bg-border/40 text-text-secondary border border-border'
                     }`}
                   >
                     {user.status}
@@ -81,10 +81,10 @@ export function UsersTab({ users = [] }) {
 
                 {/* Actions */}
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-gray-400 hover:text-blue-600 mr-3">
+                  <button className="text-text-secondary hover:text-accent mr-3">
                     <Edit className="h-4 w-4" />
                   </button>
-                  <button className="text-gray-400 hover:text-red-600">
+                  <button className="text-text-secondary hover:text-error">
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </td>
@@ -92,7 +92,7 @@ export function UsersTab({ users = [] }) {
             ))
           ) : (
             <tr>
-              <td colSpan={5} className="text-center py-8 text-gray-400">
+              <td colSpan={5} className="text-center py-8 text-text-secondary">
                 No users found.
               </td>
             </tr>

@@ -25,7 +25,7 @@ export function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="block text-sm font-medium text-text-secondary mb-1"
         >
           {label}
         </label>
@@ -35,9 +35,9 @@ export function Input({
           id={inputId}
           type={isPassword ? (showPassword ? 'text' : 'password') : type}
           className={`
-            block w-full rounded-md border-gray-300 shadow-sm
+            block w-full rounded-md border-border bg-background text-text shadow-sm
             focus:border-accent focus:ring-accent sm:text-sm p-2 border
-            disabled:bg-gray-100 disabled:text-gray-500
+            disabled:bg-background/40 disabled:text-text-secondary
             ${error ? 'border-error focus:border-error focus:ring-error' : ''}
             ${className}
           `}

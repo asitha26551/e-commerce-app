@@ -23,12 +23,12 @@ export function Modal({ isOpen, onClose, title, children }) {
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={onClose}
       />
-      <div className="relative bg-white rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between p-4 border-b">
-          <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+      <div className="relative bg-surface text-text rounded-lg shadow-neon-purple/40 border border-border max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between p-4 border-b border-border bg-background/40">
+          <h3 className="text-lg font-display font-bold text-white">{title}</h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-500 transition-colors"
+            className="text-text-secondary hover:text-primary transition-colors"
           >
             <X className="h-5 w-5" />
           </button>

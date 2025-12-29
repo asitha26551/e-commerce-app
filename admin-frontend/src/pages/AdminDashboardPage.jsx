@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 
@@ -8,20 +9,19 @@ import { ProductsTab } from '../components/admin/ProductsTab'
 import { OrdersTab } from '../components/admin/OrdersTab'
 import { CategoriesTab } from '../components/admin/CategoriesTab'
 import { UsersTab } from '../components/admin/UsersTab'
-import { AddProductModal } from '../components/admin/AddProductModal'
 
 export function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState('products')
-  const [isAddProductOpen, setIsAddProductOpen] = useState(false)
+  const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50/50">
+    <div className="min-h-screen flex flex-col bg-background text-text">
       <Navbar />
 
       <main className="flex-grow max-w-7xl mx-auto px-4 py-12 w-full">
         <DashboardHeader
           activeTab={activeTab}
-          onAddProduct={() => setIsAddProductOpen(true)}
+          onAddProduct={() => navigate('/products/new')}
         />
 
         <DashboardTabs
@@ -29,18 +29,13 @@ export function AdminDashboardPage() {
           setActiveTab={setActiveTab}
         />
 
-        <div className="bg-white rounded-xl border min-h-[400px] overflow-hidden">
+        <div className="bg-surface rounded-xl border border-border min-h-[400px] overflow-hidden shadow-neon-purple/20">
           {activeTab === 'products' && <ProductsTab />}
           {activeTab === 'orders' && <OrdersTab />}
           {activeTab === 'categories' && <CategoriesTab />}
           {activeTab === 'users' && <UsersTab />}
         </div>
       </main>
-
-      <AddProductModal
-        isOpen={isAddProductOpen}
-        onClose={() => setIsAddProductOpen(false)}
-      />
 
       <Footer />
     </div>

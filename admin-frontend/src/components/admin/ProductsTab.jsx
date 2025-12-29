@@ -3,12 +3,14 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { motion } from 'framer-motion'
 import { Edit, Trash2 } from 'lucide-react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export function ProductsTab() {
   const { state: { token } } = useAdminAuth();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -50,8 +52,8 @@ export function ProductsTab() {
     }
   };
 
-  if (loading) return <div className="p-6">Loading products...</div>;
-  if (error) return <div className="p-6 text-red-500">{error}</div>;
+  if (loading) return <div className="p-6 text-text-secondary">Loading products...</div>;
+  if (error) return <div className="p-6 text-error">{error}</div>;
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -59,14 +61,14 @@ export function ProductsTab() {
       transition={{ duration: 0.3 }}
       className="overflow-x-auto"
     >
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50/50">
+      <table className="min-w-full divide-y divide-border">
+        <thead className="bg-surface">
           <tr>
             {['Product', 'Category', 'Price', 'Stock', 'Status', 'Actions'].map(
               (col) => (
                 <th
                   key={col}
-                  className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-4 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider"
                 >
                   {col}
                 </th>
@@ -75,12 +77,12 @@ export function ProductsTab() {
           </tr>
         </thead>
 
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-surface divide-y divide-border">
           {products.length > 0 ? (
             products.map((product) => (
               <tr
                 key={product.id}
-                className="hover:bg-gray-50/50 transition-colors"
+                className="hover:bg-background/60 transition-colors"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
@@ -90,10 +92,10 @@ export function ProductsTab() {
                       className="h-10 w-10 rounded-lg object-cover border border-gray-200"
                     />
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900 line-clamp-1 max-w-xs">
+                      <div className="text-sm font-medium text-text line-clamp-1 max-w-xs">
                         {product.name}
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-text-secondary">
                         ID: {product.id}
                       </div>
                     </div>
@@ -101,19 +103,19 @@ export function ProductsTab() {
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                  <span className="inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium bg-background text-text-secondary border border-border">
                     {product.category}
                   </span>
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
+                  <div className="text-sm font-medium text-text">
                     ${product.price.toFixed(2)}
                   </div>
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
+                  <div className="text-sm text-text">
                     {product.stock} units
                   </div>
                 </td>
@@ -122,8 +124,8 @@ export function ProductsTab() {
                   <span
                     className={`px-2.5 py-0.5 inline-flex text-xs font-semibold rounded-full ${
                       product.stock > 0
-                        ? 'bg-green-50 text-green-700 border border-green-200'
-                        : 'bg-red-50 text-red-700 border border-red-200'
+                        ? 'bg-success/20 text-success border border-success/50'
+                        : 'bg-error/20 text-error border border-error/50'
                     }`}
                   >
                     {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
@@ -131,10 +133,13 @@ export function ProductsTab() {
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-gray-400 hover:text-blue-600 mr-3">
+                  <button
+                    className="text-text-secondary hover:text-accent mr-3"
+                    onClick={() => navigate(`/products/${product.id}/edit`)}
+                  >
                     <Edit className="h-4 w-4" />
                   </button>
-                  <button className="text-gray-400 hover:text-red-600" onClick={() => handleDelete(product.id)}>
+                  <button className="text-text-secondary hover:text-error" onClick={() => handleDelete(product.id)}>
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </td>
@@ -144,7 +149,7 @@ export function ProductsTab() {
             <tr>
               <td
                 colSpan={6}
-                className="text-center py-8 text-gray-400"
+                className="text-center py-8 text-text-secondary"
               >
                 No products found.
               </td>
