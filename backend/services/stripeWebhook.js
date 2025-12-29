@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import Order from '../modules/orders/Order.model.js';
 import OrderItem from '../modules/orders/OrderItem.model.js';
+import CartItem from '../modules/cart/CartItem.model.js';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -61,6 +62,8 @@ export async function handleStripeWebhook(rawBody, sig) {
         priceEach: item.priceEach,
       });
     }));
+    // Clear user's cart in DB
+    await CartItem.deleteMany({ userId });
     return { status: 200, body: { received: true } };
   }
 

@@ -1,5 +1,6 @@
 import Order from './Order.model.js';
 import OrderItem from './OrderItem.model.js';
+import CartItem from '../cart/CartItem.model.js';
 import Stripe from 'stripe';
 
 //global variables
@@ -43,6 +44,9 @@ const placeOrder = async (req, res) => {
                 priceEach: item.priceEach,
             });
         }));
+
+        // Clear user's cart in DB
+        await CartItem.deleteMany({ userId });
 
         res.status(201).json({
             message: 'Order placed successfully',
