@@ -57,6 +57,62 @@ const placeOrder = async (req, res) => {
 
 //placing orders using Stripe Method
 const placeOrderStripe = async (req, res) => {
+    try {
+        const { items, subtotal, shippingFee, total, address } = req.body;
+
+        const userId = req.userId;
+        if (!userId) {
+            return res.status(401).json({ message: 'No userId from token. Are you logged in?' });
+        }
+        if (!items || !Array.isArray(items) || items.length === 0 || !address || !address.fullName || !address.line1 || !address.city || !address.postalCode || !address.country) {
+            return res.status(400).json({ message: 'Invalid order data', debug: { items, address } });
+        }
+
+        // Prepare line items for Stripe
+        const line_items = items.map(item => ({
+            price_data: {
+                currency,
+                product_data: {
+                    name: item.productName || 'Product',
+                },
+                unit_amount: Math.round(item.priceEach * 100), // Stripe expects cents
+            },
+            quantity: item.quantity,
+        }));
+
+        if (shippingFee && shippingFee > 0) {
+            line_items.push({
+                price_data: {
+                    currency,
+                    product_data: { name: 'Shipping Fee' },
+                    unit_amount: Math.round(shippingFee * 100),
+                },
+                quantity: 1,
+            });
+        }
+
+        // Create Stripe Checkout Session
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items,
+            mode: 'payment',
+            success_url: `${process.env.CLIENT_URL || 'http://localhost:5173'}/verify?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.CLIENT_URL || 'http://localhost:5173'}/cart?cancelled=1`,
+            metadata: {
+                userId: userId.toString(),
+                address: JSON.stringify(address),
+                items: JSON.stringify(items),
+                subtotal: subtotal.toString(),
+                shippingFee: shippingFee.toString(),
+                total: total.toString(),
+            },
+        });
+
+        res.status(200).json({ url: session.url });
+    } catch (error) {
+        console.error('ERROR in placeOrderStripe:', error);
+        res.status(500).json({ message: 'Failed to create Stripe Checkout Session', error: error.message });
+    }
 }
 
 //placing orders using Razorpay Method

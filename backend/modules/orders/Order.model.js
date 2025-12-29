@@ -17,15 +17,8 @@ const orderSchema = new mongoose.Schema({
     country: String,
   },
   paymentStatus: { type: String, enum: ['pending','paid','failed','refunded'], default: 'pending' },
+  paymentIntentId: { type: String }, // For Stripe tracking
+  checkoutSessionId: { type: String }, // For Stripe session tracking
 }, { timestamps: true });
 
 export default mongoose.model('Order', orderSchema);
-
-
-  //userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  //status: { type: String, enum: ['pending','processing','shipped','delivered','cancelled'], default: 'pending' },
-  //subtotal: Number,
-  //shippingFee: Number,
-  //total: Number,
-  //paymentMethod: { type: String, enum: ['card','cod','wallet','bank'], default: 'card' },
-  //paymentStatus: { type: String, enum: ['pending','paid','failed','refunded'], default: 'pending' },
