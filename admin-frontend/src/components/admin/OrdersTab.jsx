@@ -30,8 +30,8 @@ export function OrdersTab() {
     fetchOrders()
   }, [])
 
-  if (loading) return <div className="p-8 text-gray-500">Loading orders...</div>
-  if (error) return <div className="p-8 text-red-600">{error}</div>
+  if (loading) return <div className="p-8 text-text-secondary">Loading orders...</div>
+  if (error) return <div className="p-8 text-error">{error}</div>
 
   // Modal close handler
   const closeModal = () => {
@@ -64,69 +64,69 @@ export function OrdersTab() {
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+      <table className="min-w-full divide-y divide-border">
+        <thead className="bg-surface">
           <tr>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Order ID</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Date</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">User</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Phone</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Address</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Payment</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Payment Status</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Total</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Status</th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-500">Actions</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Order ID</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Date</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">User</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Phone</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Address</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Payment</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Payment Status</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Total</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Status</th>
+            <th className="px-4 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-200">
+        <tbody className="bg-surface divide-y divide-border">
           {orders.length === 0 ? (
             <tr>
-              <td colSpan={9} className="text-center py-8 text-gray-500">No orders found.</td>
+              <td colSpan={10} className="text-center py-8 text-text-secondary">No orders found.</td>
             </tr>
           ) : (
             orders.map(order => (
-              <tr key={order._id}>
-                <td className="px-4 py-3 text-blue-600 text-sm">{order._id.slice(-6)}</td>
-                <td className="px-4 py-3 text-sm">{new Date(order.createdAt).toLocaleString()}</td>
-                <td className="px-4 py-3 text-sm">{order.userId?.name || order.userId || '-'}</td>
-                <td className="px-4 py-3 text-sm">{order.shippingAddress?.phone || '-'}</td>
-                <td className="px-4 py-3 text-sm">
+              <tr key={order._id} className="hover:bg-background/60 transition-colors">
+                <td className="px-4 py-3 text-primary text-sm font-mono">{order._id.slice(-6)}</td>
+                <td className="px-4 py-3 text-sm text-text-secondary">{new Date(order.createdAt).toLocaleString()}</td>
+                <td className="px-4 py-3 text-sm text-text">{order.userId?.name || order.userId || '-'}</td>
+                <td className="px-4 py-3 text-sm text-text-secondary">{order.shippingAddress?.phone || '-'}</td>
+                <td className="px-4 py-3 text-sm text-text-secondary">
                   {order.shippingAddress ? (
-                    <span>
+                    <span className="text-xs text-text-secondary">
                       {order.shippingAddress.fullName}<br/>
                       {order.shippingAddress.line1}{order.shippingAddress.line2 ? ', ' + order.shippingAddress.line2 : ''}<br/>
                       {order.shippingAddress.city}, {order.shippingAddress.postalCode}<br/>
                       {order.shippingAddress.country}
                     </span>
-                  ) : '-'}
+                  ) : <span className="text-text-secondary">-</span>}
                 </td>
-                <td className="px-4 py-3 text-sm">{order.paymentMethod}</td>
+                <td className="px-4 py-3 text-sm text-text-secondary">{order.paymentMethod}</td>
                 <td className="px-4 py-3 text-sm">
-                  <span className={`px-2 py-1 rounded text-xs font-semibold capitalize ${
-                    order.paymentStatus === 'paid' ? 'bg-green-100 text-green-700' :
-                    order.paymentStatus === 'failed' ? 'bg-red-100 text-red-700' :
-                    order.paymentStatus === 'refunded' ? 'bg-blue-100 text-blue-700' :
-                    'bg-yellow-100 text-yellow-700'
+                  <span className={`px-2 py-1 rounded text-xs font-semibold capitalize border ${
+                    order.paymentStatus === 'paid' ? 'bg-success/20 text-success border-success/50' :
+                    order.paymentStatus === 'failed' ? 'bg-error/20 text-error border-error/50' :
+                    order.paymentStatus === 'refunded' ? 'bg-accent/20 text-accent border-accent/50' :
+                    'bg-yellow-500/20 text-yellow-500 border-yellow-500/50'
                   }`}>
                     {order.paymentStatus || 'pending'}
                   </span>
                 </td>
-                <td className="px-4 py-3 font-bold text-sm">${order.total?.toFixed(2) ?? '0.00'}</td>
-                <td className="px-4 py-3 text-sm">
-                  <span className={`px-2 py-1 rounded text-xs font-semibold capitalize ${
-                    order.status === 'delivered' ? 'bg-green-100 text-green-700' :
-                    order.status === 'shipped' ? 'bg-blue-100 text-blue-700' :
-                    order.status === 'cancelled' ? 'bg-red-100 text-red-700' :
-                    'bg-yellow-100 text-yellow-700'
+                <td className="px-4 py-3 font-bold text-sm text-text">${order.total?.toFixed(2) ?? '0.00'}</td>
+                <td className="px-4 py-3 text-sm whitespace-nowrap">
+                  <span className={`px-3 py-1 rounded text-xs font-semibold capitalize border ${
+                    order.status === 'delivered' ? 'bg-success/20 text-success border-success/50' :
+                    order.status === 'shipped' ? 'bg-accent/20 text-accent border-accent/50' :
+                    order.status === 'cancelled' ? 'bg-error/20 text-error border-error/50' :
+                    'bg-yellow-500/20 text-yellow-500 border-yellow-500/50'
                   }`}>{order.status}</span>
                 </td>
                 <td className="px-4 py-3 flex gap-2 items-center text-sm">
-                  <button title="View Details" onClick={() => { setSelectedOrder(order); setStatus(order.status); }} className="p-1 rounded hover:bg-gray-100">
-                    <Eye className="h-4 w-4 text-blue-600" />
+                  <button title="View Details" onClick={() => { setSelectedOrder(order); setStatus(order.status); }} className="p-1 rounded hover:bg-background/80">
+                    <Eye className="h-4 w-4 text-accent" />
                   </button>
-                  <button title="Update Status" onClick={() => { setSelectedOrder(order); setStatus(order.status); }} className="p-1 rounded hover:bg-gray-100">
-                    <Edit className="h-4 w-4 text-yellow-600" />
+                  <button title="Update Status" onClick={() => { setSelectedOrder(order); setStatus(order.status); }} className="p-1 rounded hover:bg-background/80">
+                    <Edit className="h-4 w-4 text-cta" />
                   </button>
                 </td>
               </tr>
