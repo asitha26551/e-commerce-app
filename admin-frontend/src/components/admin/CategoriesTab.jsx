@@ -39,38 +39,33 @@ export function CategoriesTab() {
     fetchCategories();
   }, []);
 
-  // Remove handleAddCategory. Only AddCategoryModal does the POST. Use fetchCategories as onAdd.
-
+  // Add subcategory via API; used by AddSubcategoryModal through onAdd
   const handleAddSubcategory = async (name) => {
-    if (!selectedCategory) return;
-    try {
-      await axios.post('/api/subcategory', { name, categoryId: selectedCategory._id }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token || '',
-        },
-      });
-      setShowAddSubModal(false);
-      fetchCategories();
-    } catch (err) {
-      alert(err.response?.data?.message || err.message);
+    if (!selectedCategory) {
+      throw new Error('No category selected');
     }
+    await axios.post('/api/subcategory', { name, categoryId: selectedCategory._id }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token || '',
+      },
+    });
+    setShowAddSubModal(false);
+    await fetchCategories();
   };
 
   const handleAddProductType = async (name) => {
-    if (!selectedSubcategory) return;
-    try {
-      await axios.post('/api/product-type', { name, subcategoryId: selectedSubcategory._id }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token || '',
-        },
-      });
-      setShowAddTypeModal(false);
-      fetchCategories();
-    } catch (err) {
-      alert(err.response?.data?.message || err.message);
+    if (!selectedSubcategory) {
+      throw new Error('No subcategory selected');
     }
+    await axios.post('/api/product-type', { name, subcategoryId: selectedSubcategory._id }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token || '',
+      },
+    });
+    setShowAddTypeModal(false);
+    await fetchCategories();
   };
 
   return (

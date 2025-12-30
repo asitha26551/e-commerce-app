@@ -166,7 +166,9 @@ const allOrders = async (req, res) => {
         // Attach items to each order
         const ordersWithItems = await Promise.all(
             orders.map(async (order) => {
-                const items = await OrderItem.find({ orderId: order._id });
+                const items = await OrderItem.find({ orderId: order._id })
+                    .populate({ path: 'productId', select: 'name' })
+                    .populate({ path: 'variantId', select: 'name' });
                 return { ...order.toObject(), items };
             })
         );

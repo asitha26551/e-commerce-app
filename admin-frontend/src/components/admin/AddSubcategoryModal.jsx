@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAdminAuth } from '../../context/AdminAuthContext';
-import axios from 'axios';
 
 export function AddSubcategoryModal({ isOpen, onClose, onAdd, categoryName, categoryId }) {
   const [name, setName] = useState("");
@@ -13,14 +12,10 @@ export function AddSubcategoryModal({ isOpen, onClose, onAdd, categoryName, cate
     setLoading(true);
     setError(null);
     try {
-      await axios.post('/api/subcategory', { name, categoryId }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token || '',
-        },
-      });
+      if (onAdd) {
+        await onAdd(name);
+      }
       setName("");
-      onAdd && onAdd();
       onClose();
     } catch (err) {
       setError(err.response?.data?.message || err.message);
@@ -32,20 +27,22 @@ export function AddSubcategoryModal({ isOpen, onClose, onAdd, categoryName, cate
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-80 space-y-4">
-        <h2 className="text-lg font-bold">Add Subcategory to {categoryName}</h2>
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-surface border border-border shadow-neon-purple rounded-xl w-full max-w-md p-6 space-y-5">
+        <h2 className="text-xl font-display font-bold text-primary mb-2">
+          Add Subcategory to <span className="text-accent">{categoryName}</span>
+        </h2>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter subcategory name"
-          className="w-full border p-2 rounded"
+          className="w-full bg-background border border-border text-text placeholder:text-text-secondary p-3 rounded focus:outline-none focus:ring-2 focus:ring-accent transition"
         />
-        {error && <div className="text-red-500 text-sm">{error}</div>}
-        <div className="flex justify-end gap-2">
+        {error && <div className="text-error text-sm font-medium">{error}</div>}
+        <div className="flex justify-end gap-3 pt-2">
           <button
-            className="px-4 py-2 border rounded"
+            className="px-4 py-2 rounded border border-border text-text bg-transparent hover:bg-white/5 transition"
             onClick={() => {
               onClose();
               setName("");
@@ -56,7 +53,7 @@ export function AddSubcategoryModal({ isOpen, onClose, onAdd, categoryName, cate
             Cancel
           </button>
           <button
-            className="px-4 py-2 bg-accent text-white rounded"
+            className="px-4 py-2 rounded bg-accent text-white font-semibold shadow-neon-accent hover:brightness-110 transition"
             onClick={handleAdd}
             disabled={loading}
           >

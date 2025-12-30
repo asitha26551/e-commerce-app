@@ -28,16 +28,16 @@ export function LoginPage() {
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <main className="w-full max-w-md space-y-8 bg-white p-8 rounded-lg shadow-md">
+      <main className="w-full max-w-md space-y-8 bg-surface border border-border shadow-neon-purple rounded-xl p-8">
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Sign in to your account
+          <h2 className="mt-6 text-3xl font-bold font-display text-primary drop-shadow-neon">
+            Admin Sign In
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-text-secondary">
             Or{' '}
             <Link
               to="/register"
-              className="font-medium text-accent hover:text-blue-500"
+              className="font-medium text-accent hover:text-primary"
             >
               create a new account
             </Link>
@@ -66,11 +66,11 @@ export function LoginPage() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                className="h-4 w-4 text-accent focus:ring-accent border-border bg-background rounded"
               />
               <label
                 htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900"
+                className="ml-2 block text-sm text-text-secondary"
               >
                 Remember me
               </label>
@@ -78,13 +78,13 @@ export function LoginPage() {
             <div className="text-sm">
               <a
                 href="#"
-                className="font-medium text-accent hover:text-blue-500"
+                className="font-medium text-accent hover:text-primary"
               >
                 Forgot your password?
               </a>
             </div>
           </div>
-          <Button type="submit" size="lg" className="w-full">
+          <Button type="submit" size="lg" className="w-full shadow-neon-accent">
             Sign in
           </Button>
         </form>

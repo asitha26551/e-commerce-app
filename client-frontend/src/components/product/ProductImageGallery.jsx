@@ -42,14 +42,15 @@ export function ProductImageGallery({ images, productName }) {
       </div>
 
       {/* Main Image */}
-      <div className="flex-1 relative bg-white rounded-lg overflow-hidden border border-gray-100 aspect-square md:aspect-auto md:h-[600px]">
+      <div className="flex-1 relative bg-white rounded-lg overflow-hidden aspect-square md:aspect-square flex items-center justify-center">
         <img
           src={images[selectedImageIndex]}
           alt={productName}
           className={`
-            w-full h-full object-contain object-center transition-opacity duration-300
+            max-w-full max-h-full w-auto h-auto object-contain object-center transition-opacity duration-300
             ${isAnimating ? 'opacity-50' : 'opacity-100'}
           `}
+          style={{ aspectRatio: '1 / 1', width: '100%', height: '100%' }}
         />
       </div>
     </div>

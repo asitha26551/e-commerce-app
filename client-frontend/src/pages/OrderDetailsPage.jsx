@@ -98,13 +98,27 @@ export function OrderDetailsPage() {
         <section className="mb-8">
           <h3 className="text-lg font-semibold text-white mb-2">Shipping Address</h3>
           <div className="bg-surface rounded-lg border border-border p-4 text-text-secondary">
-            <div>
-              <span className="font-medium text-white">{order.shippingAddress.fullName}</span>
-            </div>
-            <div>{order.shippingAddress.phone}</div>
-            <div>{order.shippingAddress.line1}{order.shippingAddress.line2 ? `, ${order.shippingAddress.line2}` : ''}</div>
-            <div>{order.shippingAddress.city}, {order.shippingAddress.postalCode}</div>
-            <div>{order.shippingAddress.country}</div>
+            {order.shippingAddress?.fullName && (
+              <div><span className="font-medium text-white">{order.shippingAddress.fullName}</span></div>
+            )}
+            {order.shippingAddress?.phone && (
+              <div>{order.shippingAddress.phone}</div>
+            )}
+            {order.shippingAddress?.line1 && (
+              <div>{order.shippingAddress.line1}</div>
+            )}
+            {order.shippingAddress?.line2 && (
+              <div>{order.shippingAddress.line2}</div>
+            )}
+            {order.shippingAddress?.city && (
+              <div>{order.shippingAddress.city}</div>
+            )}
+            {order.shippingAddress?.postalCode && (
+              <div>{order.shippingAddress.postalCode}</div>
+            )}
+            {order.shippingAddress?.country && (
+              <div>{order.shippingAddress.country}</div>
+            )}
           </div>
         </section>
         {/* Ordered Items */}
