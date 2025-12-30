@@ -23,13 +23,17 @@ const loginUser = async (req, res) => {
             return res.status(400).json({msg: "User does not exist"});
         }
 
+        if (user.status === 'inactive') {
+            return res.status(403).json({success: false, msg: "Your account is inactive. Please contact support."});
+        }
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
             const token = createToken(user._id)
             res.json({success:true, token});
-        }else{
+        } else {
             res.status(400).json({success:false, msg: "Invalid credentials"});
         }
+        
     } catch (error) {
         console.log(error);
         res.json({sucess:false, message:error.message})
@@ -38,9 +42,6 @@ const loginUser = async (req, res) => {
 
 //Route for user registration
 const registerUser = async (req, res) => {
-    // To see if the route is working
-    //res.json({msg: "Register API working"})
-
     try{
         const { name, email, password } = req.body;
 
@@ -195,4 +196,37 @@ const changePassword = async (req, res) => {
     }
 };
 
-export {loginUser, registerUser, adminlogin, getCurrentUser, updateCurrentUser, changePassword};
+// Get all users (admin only)
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await userModel.find({}, '-password');
+        res.json({ success: true, users });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+
+// Update user status by admin
+const updateUserStatus = async (req, res) => {
+    try {
+        const { userId, status } = req.body;
+        if (!userId || !status) {
+            return res.status(400).json({ success: false, msg: 'User ID and status required' });
+        }
+
+        const updatedUser = await userModel.findByIdAndUpdate(userId, { status }, { new: true }).select('-password');
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, msg: 'User not found' });
+        }
+
+        return res.json({ success: true, user: updatedUser, msg: 'Status updated' });
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+export {loginUser, registerUser, adminlogin, getCurrentUser, updateCurrentUser, changePassword, getAllUsers, updateUserStatus};
