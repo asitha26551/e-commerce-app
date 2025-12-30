@@ -11,7 +11,7 @@ export function ProductCard({ product }) {
   const handleAddToCart = (e) => {
     e.preventDefault(); // Prevent navigation to details page
     e.stopPropagation(); // Prevent event bubbling to Link
-    console.log('handleAddToCart fired for product:', product.id);
+    // console.log('handleAddToCart fired for product:', product.id);
     addToCart(product);
   }
 

@@ -31,7 +31,7 @@ export function ProductFilters({
           : [];
         setCategories(cats)
       } catch (err) {
-        console.error('Failed to fetch categories:', err)
+        // console.error('Failed to fetch categories:', err)
       }
     }
     fetchCategories()
@@ -61,7 +61,7 @@ export function ProductFilters({
         const res = await api.get(`/subcategory?categoryId=${selectedCategoryId}`)
         setSubcategories(Array.isArray(res.data) ? res.data : [])
       } catch (err) {
-        console.error('Failed to fetch subcategories:', err)
+        // console.error('Failed to fetch subcategories:', err)
         setSubcategories([])
       }
     }
@@ -79,7 +79,7 @@ export function ProductFilters({
         const res = await api.get(`/product-type?subcategoryId=${selectedSubcategoryId}`)
         setProductTypes(Array.isArray(res.data) ? res.data : [])
       } catch (err) {
-        console.error('Failed to fetch product types:', err)
+        // console.error('Failed to fetch product types:', err)
         setProductTypes([])
       }
     }

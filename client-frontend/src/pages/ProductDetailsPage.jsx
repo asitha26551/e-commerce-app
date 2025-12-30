@@ -82,7 +82,7 @@ export function ProductDetailsPage() {
           setRelatedProducts(related)
         }
       } catch (err) {
-        console.error('Failed to fetch product:', err)
+        // console.error('Failed to fetch product:', err)
       } finally {
         setLoading(false)
       }
