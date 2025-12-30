@@ -4,8 +4,8 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import connectDB from './config/mongodb.js';
 import connectCloudinary from './config/cloudinary.js';
-import userRouter from './modules/users/User.route.js';
-import productRouter from './modules/products/Product.route.js';
+import userRouter from './modules/users/user.route.js';
+import productRouter from './modules/products/product.route.js';
 import categoryRouter from './modules/categories/category.route.js';
 import subcategoryRouter from './modules/categories/subcategory.route.js';
 import productTypeRouter from './modules/categories/productType.route.js';
