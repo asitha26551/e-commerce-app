@@ -192,7 +192,7 @@ export function ProductDetailsPage() {
             </div>
 
             {/* Description */}
-            <p className="text-text-secondary mb-8 leading-relaxed">{product.description}</p>
+            <p className="text-text-secondary mb-8 leading-relaxed whitespace-pre-line">{product.description}</p>
 
             {/* Quantity */}
             <div className="mb-8">
@@ -225,12 +225,6 @@ export function ProductDetailsPage() {
               <Button variant="cta" size="lg" className="flex-1" onClick={handleAddToCart}>
                 Add to Cart
               </Button>
-              <Button variant="secondary" size="lg" className="flex-1">
-                Buy Now
-              </Button>
-              <button className="p-3 border border-border rounded-md hover:bg-surface text-text-secondary">
-                <Heart className="h-6 w-6" />
-              </button>
             </div>
 
             {/* Features */}

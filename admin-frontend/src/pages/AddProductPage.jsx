@@ -268,7 +268,8 @@ export function AddProductPage() {
               placeholder="Enter product description..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="block w-full rounded-md border border-border bg-background text-text text-sm px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+              className="block w-full rounded-md border border-border bg-background text-text text-sm px-3 py-2 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary whitespace-pre-wrap"
+              style={{ whiteSpace: 'pre-wrap' }}
             />
           </div>
 
