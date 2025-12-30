@@ -30,32 +30,32 @@ export function CartProvider({ children }) {
             description: p.description || ''
           }));
 
-          console.log('DEBUG cartData:', cartRes.data.cartData);
-          console.log('DEBUG mappedProducts:', mappedProducts);
+          // console.log('DEBUG cartData:', cartRes.data.cartData);
+          // console.log('DEBUG mappedProducts:', mappedProducts);
 
           const cartArr = Object.entries(cartRes.data.cartData)
             .map(([id, quantity]) => {
               // Try both string and ObjectId matching
               const product = mappedProducts.find(p => p.id == id || String(p.id) === String(id));
               if (!product) {
-                console.warn('No product found for cart id', id);
+                // console.warn('No product found for cart id', id);
                 return null;
               }
               return { ...product, quantity };
             })
             .filter(Boolean);
 
-          console.log('DEBUG cartArr:', cartArr);
+          // console.log('DEBUG cartArr:', cartArr);
           setItems(cartArr);
         })
-        .catch((e) => { console.error('CartContext fetch error', e); });
+        .catch((e) => { /* console.error('CartContext fetch error', e); */ });
     } else {
       const savedCart = localStorage.getItem('cart');
       if (savedCart) {
         try {
           setItems(JSON.parse(savedCart));
         } catch (e) {
-          console.error('Failed to parse cart from local storage');
+          // console.error('Failed to parse cart from local storage');
         }
       }
     }

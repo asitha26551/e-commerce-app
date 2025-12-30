@@ -82,7 +82,7 @@ export function HomePage() {
           }))
         )
       } catch (err) {
-        console.error('Home page fetch failed:', err)
+        // console.error('Home page fetch failed:', err)
       } finally {
         setLoading(false)
       }

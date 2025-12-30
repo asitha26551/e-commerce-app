@@ -41,12 +41,12 @@ export function CheckoutPage() {
       description: 'Pay securely with credit/debit card',
       icon: '💳',
     },
-    {
-      id: 'razorpay',
-      name: 'Razorpay',
-      description: 'UPI, Cards, NetBanking & More',
-      icon: '🔐',
-    },
+    // {
+    //   id: 'razorpay',
+    //   name: 'Razorpay',
+    //   description: 'UPI, Cards, NetBanking & More',
+    //   icon: '🔐',
+    // },
   ]
 
   const handleAddressChange = (e) => {
@@ -276,7 +276,7 @@ export function CheckoutPage() {
                     </div>
                   </div>
                 )}
-                {paymentMethod === 'razorpay' && (
+                {/* {paymentMethod === 'razorpay' && (
                   <div className="flex items-start">
                     <div className="flex-shrink-0 text-2xl mr-3">⚡</div>
                     <div>
@@ -289,7 +289,7 @@ export function CheckoutPage() {
                       </p>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             </section>
           </div>

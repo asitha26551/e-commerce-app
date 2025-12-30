@@ -53,7 +53,7 @@ export function ProductListingPage() {
           description: p.description || ''
         })))
       } catch (err) {
-        console.error('Failed to fetch products:', err)
+        // console.error('Failed to fetch products:', err)
       } finally {
         setLoading(false)
       }
@@ -71,8 +71,8 @@ export function ProductListingPage() {
   }, [selectedCategory, selectedSubcategory, selectedProductType, setSearchParams])
 
   // Debug: log products and filter states
-  console.log('Products:', products)
-  console.log('Filters:', { selectedCategory, selectedSubcategory, selectedProductType, priceRange })
+  // console.log('Products:', products)
+  // console.log('Filters:', { selectedCategory, selectedSubcategory, selectedProductType, priceRange })
 
   // Relaxed filter logic: only filter if product field exists
   const filteredProducts = products
