@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   role: { type: String, enum: ["customer", "seller", "admin"], default: "customer" },
   password: { type: String, required: true },
   phone: String,
+  status: { type: String, enum: ["active", "inactive"], default: "active" },
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);
