@@ -14,7 +14,7 @@ export function AddCategoryModal({ isOpen, onClose, onAdd, token }) {
     setLoading(true);
     setError(null);
     try {
-      await axios.post('/api/categories', { name }, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/categories`, { name }, {
         headers: {
           'Content-Type': 'application/json',
           'token': token || '',

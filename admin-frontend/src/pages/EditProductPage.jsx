@@ -40,8 +40,8 @@ export function EditProductPage() {
       setLoading(true);
       try {
         const [prodRes, catRes] = await Promise.all([
-          axios.get(`/api/product/${id}`),
-          axios.get('/api/categories', {
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}api/product/${id}`),
+          axios.get(`${import.meta.env.VITE_BACKEND_URL}api/categories`, {
             headers: { token: token || '' },
           }),
         ]);
@@ -135,7 +135,7 @@ export function EditProductPage() {
       newImages.forEach((img, idx) => {
         formData.append(`image${idx + 1}`, img);
       });
-      await axios.put(`/api/product/${id}`, formData, {
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL}api/product/${id}`, formData, {
         headers: {
           token: token || '',
         },

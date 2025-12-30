@@ -16,7 +16,7 @@ export function ProductsTab() {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get('/api/product');
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/product`);
       // Use data.products if present (backend returns { products: [...] })
       const arr = Array.isArray(res.data.products) ? res.data.products : [];
       setProducts(arr.map(p => ({
@@ -41,7 +41,7 @@ export function ProductsTab() {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this product?')) return;
     try {
-      await axios.delete(`/api/product/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}api/product/${id}`, {
         headers: {
           'token': token || '',
         },

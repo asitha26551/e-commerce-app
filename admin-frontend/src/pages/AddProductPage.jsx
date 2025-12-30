@@ -35,7 +35,7 @@ export function AddProductPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await axios.get('/api/categories', {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/categories`, {
           headers: {
             'Content-Type': 'application/json',
             token: token || '',
@@ -132,7 +132,7 @@ export function AddProductPage() {
         formData.append(`image${idx + 1}`, img);
       });
 
-      await axios.post('/api/product', formData, {
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/product`, formData, {
         headers: {
           token: token || '',
         },

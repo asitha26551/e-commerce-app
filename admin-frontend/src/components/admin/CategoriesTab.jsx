@@ -21,7 +21,7 @@ export function CategoriesTab() {
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('/api/categories', {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}api/categories`, {
         headers: {
           'Content-Type': 'application/json',
           'token': token || '',
@@ -44,7 +44,7 @@ export function CategoriesTab() {
     if (!selectedCategory) {
       throw new Error('No category selected');
     }
-    await axios.post('/api/subcategory', { name, categoryId: selectedCategory._id }, {
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/subcategory`, { name, categoryId: selectedCategory._id }, {
       headers: {
         'Content-Type': 'application/json',
         'token': token || '',
@@ -58,7 +58,7 @@ export function CategoriesTab() {
     if (!selectedSubcategory) {
       throw new Error('No subcategory selected');
     }
-    await axios.post('/api/product-type', { name, subcategoryId: selectedSubcategory._id }, {
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}api/product-type`, { name, subcategoryId: selectedSubcategory._id }, {
       headers: {
         'Content-Type': 'application/json',
         'token': token || '',
