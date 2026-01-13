@@ -1,3 +1,0 @@
-sk_test_.*==>REMOVED
-sk_live_.*==>REMOVED
-whsec_.*==>REMOVED
