@@ -78,7 +78,7 @@ export function AboutPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <div className="inline-block px-3 py-1 mb-6 border border-primary/50 rounded-full bg-primary/10 backdrop-blur-sm">
               <span className="text-primary font-bold tracking-wider text-sm uppercase">
-                GAMEZONE
+                GearRealm
               </span>
             </div>
             <h1 className="text-4xl md:text-6xl font-display font-black mb-6 text-white leading-tight">
@@ -119,7 +119,7 @@ export function AboutPage() {
                 </div>
                 <div className="space-y-4 text-gray-300 leading-relaxed">
                   <p>
-                    Founded in 2020, GameZone started as a LAN party dream. We
+                    Founded in 2020, GearRealm started as a LAN party dream. We
                     were tired of overpriced, underperforming gear. So we
                     decided to change the meta.
                   </p>

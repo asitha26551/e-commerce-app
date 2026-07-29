@@ -160,7 +160,7 @@ export function AddProductPage() {
             Add New Product
           </h1>
           <p className="text-text-secondary">
-            Create a new product listing for your GAMEZONE store.
+            Create a new product listing for your GearRealm store.
           </p>
         </div>
 

@@ -6,7 +6,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between md:flex-row">
           <p className="text-sm text-text-secondary">
-            &copy; {new Date().getFullYear()} GAMEZONE Admin. All rights reserved.
+            &copy; {new Date().getFullYear()} GearRealm Admin. All rights reserved.
           </p>
 
           <div className="mt-4 flex space-x-6 md:mt-0">

@@ -70,9 +70,9 @@ export function Navbar() {
               to="/"
               className="text-2xl font-display font-black tracking-wider text-white hover:text-primary transition-colors group"
             >
-              GAME
+              GEAR
               <span className="text-cta group-hover:text-shadow-glow transition-all">
-                ZONE
+                REALM
               </span>
             </Link>
           </div>

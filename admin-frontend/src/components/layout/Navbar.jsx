@@ -23,7 +23,7 @@ export function Navbar() {
                 <span className="text-lg font-display font-bold text-white">A</span>
               </div>
               <span className="hidden text-xl font-display font-bold text-white sm:block">
-                GAMEZONE ADMIN
+                GearRealm Admin
               </span>
             </div>
           </div>

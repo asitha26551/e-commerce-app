@@ -157,7 +157,7 @@ export function EditProductPage() {
       <main className="flex-grow max-w-5xl mx-auto px-4 py-10 w-full">
         <div className="mb-6">
           <h1 className="text-3xl font-display font-bold text-white">Edit Product</h1>
-          <p className="text-text-secondary">Update product details for your GAMEZONE store.</p>
+          <p className="text-text-secondary">Update product details for your GearRealm store.</p>
         </div>
         <form className="space-y-6 bg-surface border border-border rounded-xl p-6 shadow-neon-purple/20" onSubmit={handleSubmit}>
           <Input label="Product Name" name="name" value={form.name} onChange={handleInput} />

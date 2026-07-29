@@ -5,6 +5,7 @@ import { Footer } from '../components/layout/Footer'
 import { Input } from '../components/ui/Input'
 import { Button } from '../components/ui/Button'
 import { registerUser } from '../services/api'
+import { UserPlus } from 'lucide-react'
 
 export function RegisterPage() {
   const [name, setName] = useState('');
@@ -44,34 +45,50 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background dark:bg-gray-950 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-background text-text">
       <Navbar />
-      <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8 bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800">
+      <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=2000')] bg-cover bg-center opacity-10 pointer-events-none"></div>
+        <div className="absolute inset-0 scan-lines pointer-events-none"></div>
+
+        <div className="max-w-md w-full space-y-8 bg-surface/90 backdrop-blur-md p-8 rounded-lg shadow-neon-purple border border-border relative z-10">
           <div className="text-center">
-            <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">Create your account</h2>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex justify-center mb-4">
+              <div className="bg-background p-3 rounded-full border border-primary shadow-neon-purple">
+                <UserPlus className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            <h2 className="mt-2 text-3xl font-display font-bold text-white">CREATE ACCOUNT</h2>
+            <p className="mt-2 text-sm text-text-secondary">
               Already have an account?{' '}
-              <Link to="/login" className="font-medium text-accent dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">Sign in</Link>
+              <Link to="/login" className="font-medium text-accent hover:text-white transition-colors">
+                sign in
+              </Link>
             </p>
           </div>
+
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-4">
-              <Input label="Full Name" required placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white" />
-              <Input label="Email address" type="email" autoComplete="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white" />
-              <Input label="Password" type="password" required placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white" />
-              <Input label="Confirm Password" type="password" required placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white" />
+              <Input label="FULL NAME" required placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} />
+              <Input label="EMAIL ADDRESS" type="email" autoComplete="email" required placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} />
+              <Input label="PASSWORD" type="password" required placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} />
+              <Input label="CONFIRM PASSWORD" type="password" required placeholder="••••••••" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
             </div>
+
             <div className="flex items-center">
-              <input id="terms" name="terms" type="checkbox" className="h-4 w-4 text-primary focus:ring-primary border-gray-300 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-800" required />
-              <label htmlFor="terms" className="ml-2 block text-sm text-gray-900 dark:text-gray-200">
+              <input id="terms" name="terms" type="checkbox" className="h-4 w-4 text-primary focus:ring-primary border-border rounded bg-background" required />
+              <label htmlFor="terms" className="ml-2 block text-sm text-text-secondary">
                 I agree to the{' '}
-                <a href="#" className="text-accent dark:text-blue-400 hover:underline">Terms and Conditions</a>
+                <a href="#" className="text-accent hover:text-white transition-colors">Terms and Conditions</a>
               </label>
             </div>
-            {error && <div className="text-error dark:text-red-400 text-sm text-center">{error}</div>}
-            {success && <div className="text-success dark:text-green-400 text-sm text-center">{success}</div>}
-            <Button type="submit" fullWidth size="lg" disabled={loading} className="bg-primary dark:bg-blue-600 hover:bg-primary/90 dark:hover:bg-blue-700 text-white">{loading ? 'Creating...' : 'Create Account'}</Button>
+
+            {error && <div className="text-error text-sm text-center">{error}</div>}
+            {success && <div className="text-success text-sm text-center">{success}</div>}
+
+            <Button type="submit" fullWidth size="lg" variant="cta" disabled={loading}>
+              {loading ? 'Creating account...' : 'CREATE ACCOUNT'}
+            </Button>
           </form>
         </div>
       </main>

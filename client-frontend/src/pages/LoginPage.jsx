@@ -74,7 +74,7 @@ export function LoginPage() {
                 type="email"
                 autoComplete="email"
                 required
-                placeholder="player@gamezone.com"
+                placeholder="player@gearrealm.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />

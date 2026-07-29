@@ -19,7 +19,7 @@ export function Footer() {
           {/* Company Info */}
           <div>
             <h3 className="text-white text-xl font-display font-bold mb-6 gradient-text">
-              GAMEZONE
+              GearRealm
             </h3>
             <p className="text-sm mb-6 leading-relaxed">
               Level up your setup with premium gaming gear. High-performance
@@ -168,7 +168,7 @@ export function Footer() {
               </li>
               <li className="flex items-center group">
                 <Mail className="h-5 w-5 mr-3 flex-shrink-0 text-primary group-hover:text-accent transition-colors" />
-                <span>support@gamezone.com</span>
+                <span>support@gearrealm.com</span>
               </li>
             </ul>
           </div>
@@ -176,8 +176,7 @@ export function Footer() {
 
         <div className="border-t border-border pt-8 text-center text-sm text-gray-500">
           <p>
-            &copy; {new Date().getFullYear()} GameZone. All rights reserved. GG
-            WP.
+            &copy; {new Date().getFullYear()} GearRealm. All rights reserved.
           </p>
         </div>
       </div>
