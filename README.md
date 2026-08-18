@@ -160,16 +160,6 @@ Implemented APIs include:
 - Admin dashboard development.
 - Deployment configuration.
 
-## Future Improvements
-
-- Connect wishlist functionality with backend services.
-- Complete Razorpay payment integration.
-- Add product reviews and ratings.
-- Improve search and filtering performance.
-- Add pagination for large product collections.
-- Implement automated testing.
-- Improve project documentation.
-
 ## Installation & Setup
 
 ### Backend
